@@ -9,14 +9,14 @@ use crate::payloads::EmptyPayload;
     rename_all = "SCREAMING_SNAKE_CASE"
 )]
 pub enum AuthRequest<'a> {
-    Authenticate(#[serde(borrow)] AuthReqPayload<'a>),
+    Authenticate(#[serde(borrow)] AuthRequestPayload<'a>),
     Deauthenticate(EmptyPayload),
-    RegisterUser(#[serde(borrow)] RegisterPayload<'a>),
+    RegisterUser(#[serde(borrow)] RegisterUserPayload<'a>),
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 #[serde(rename = "payload")]
-pub struct AuthReqPayload<'a> {
+pub struct AuthRequestPayload<'a> {
     #[serde(rename = "username")]
     pub raw_username: &'a str,
     #[serde(rename = "password")]
@@ -25,7 +25,7 @@ pub struct AuthReqPayload<'a> {
 
 #[derive(Serialize, Deserialize, Debug)]
 #[serde(rename = "payload")]
-pub struct RegisterPayload<'a> {
+pub struct RegisterUserPayload<'a> {
     #[serde(rename = "username")]
     pub raw_username: &'a str,
     #[serde(rename = "password")]

@@ -16,6 +16,7 @@ pub struct RawThread<'a> {
     user_id: u32,
     title: &'a str,
     description: &'a str,
+    /// UNIX timestamp
     timestamp: i64, // TODO perhaps change to a `DateTime`?
 }
 

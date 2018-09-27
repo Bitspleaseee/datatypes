@@ -21,10 +21,10 @@ pub enum AuthSuccess {
     rename_all = "SCREAMING_SNAKE_CASE"
 )]
 pub enum AuthError {
-    #[fail(display = "token missing from cookies")]
-    RequestMissingToken,
-    #[fail(display = "server did not have the provided token")]
-    ServerMissingToken,
+    #[fail(display = "client (cookies) does not have token")]
+    MissingTokenClient,
+    #[fail(display = "server does not have provided token")]
+    MissingTokenServer,
     #[fail(display = "invalid username")]
     InvalidUsername,
     #[fail(display = "invalid password")]
