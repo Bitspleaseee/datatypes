@@ -71,17 +71,45 @@ pub type EmptyPayload = Option<EmptyPayloadStrict>;
 /// NB! The type that is wrapped cannot contain a field named `token`
 /// (`#[serde(rename="...")]` could be used to circument this)
 ///
-/// # JSON structure
+/// # Example usage
 ///
-/// ```json
-/// "payload": {
-///     "token": "<any-type-of-token>",
-///     "field1": "field1 on the inner type",
-///     "field2": "field2 on the inner type",
-///     /* ... */
+/// ```
+/// # use datatypes::payloads::AuthPayload;
+/// # #[macro_use]
+/// # extern crate serde_derive;
+/// #[derive(Serialize, Deserialize, PartialEq, Debug)]
+/// struct UserPayload<'a> {
+///     name: &'a str,
+///     email: &'a str,
+/// }
+///
+/// #[derive(Serialize, Deserialize, PartialEq, Debug)]
+/// struct UserToken(u32);
+///
+/// type AuthUserPayload<'a> = AuthPayload<UserPayload<'a>, UserToken>;
+///
+/// fn main() {
+///
+///     let user_payload = UserPayload {
+///         name: "John Doe",
+///         email: "john@doe.com"
+///     };
+///     let token = UserToken(123456789);
+///
+///     // Make a new authentication payload with a inner type and a token
+///     let payload = AuthUserPayload::new(user_payload, token);
+///
+///     let json = r#"{
+///                      "name": "John Doe",
+///                      "email": "john@doe.com",
+///                      "token": 123456789
+///                   }"#;
+///
+///     let expt: AuthUserPayload = serde_json::from_str(json).unwrap();
+///     assert_eq!(expt, payload);
 /// }
 /// ```
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, PartialEq, PartialOrd, Debug)]
 #[serde(rename = "payload")]
 pub struct AuthPayload<Inner, Token> {
     token: Token,
