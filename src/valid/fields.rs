@@ -1,35 +1,13 @@
 //! Validated datafields
 
-use super::ValidationError;
+// TODO add tests which vertifies the `TryFrom` implementations
+
+use super::ValidationError::*;
 use std::convert::TryFrom;
 use std::fmt::{self, Display};
 
-use super::{
-    COMMENT_CONTENT_REGEX, DESCRIPTION_REGEX, EMAIL_REGEX, PASSWORD_REGEX, TITLE_REGEX,
-    USERNAME_REGEX,
-};
+use super::{EMAIL_REGEX, PASSWORD_REGEX, USERNAME_REGEX};
 use regex::Regex;
-
-// A macro too generate `TryFrom` implementations based on a regex in a simple
-// way
-macro_rules! try_from_regex {
-    ($ty:ty, $regex:expr => ($constructor:expr, $err:expr)) => {
-        impl<'a> TryFrom<&'a str> for $ty {
-            type Error = ValidationError;
-            fn try_from(s: &'a str) -> Result<Self, Self::Error> {
-                lazy_static! {
-                    static ref RE: Regex =
-                        Regex::new($regex).expect(&format!("regex '{}' is invalid", $regex));
-                }
-                if RE.is_match(s) {
-                    Ok($constructor(s))
-                } else {
-                    Err($err)
-                }
-            }
-        }
-    };
-}
 
 /// A valid (well formatted) username
 ///
@@ -37,8 +15,12 @@ macro_rules! try_from_regex {
 /// constructed through `try_into`
 #[derive(Serialize, PartialEq, PartialOrd, Eq, Ord, Debug, Copy, Clone)]
 pub struct Username<'a>(&'a str);
-try_from_regex!(Username<'a>,
-                USERNAME_REGEX => (Username, ValidationError::InvalidUsername));
+
+impl_try_from! {
+    impl<'a> TryFrom<&'a str> for Username<'a> {
+        @USERNAME_REGEX => Username | InvalidUsername
+    }
+}
 
 impl<'a> Display for Username<'a> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
@@ -56,9 +38,12 @@ impl<'a> Display for Username<'a> {
 #[derive(Serialize, PartialEq, PartialOrd, Eq, Ord, Copy, Clone)]
 #[serde(rename = "password")]
 pub struct PlainPassword<'a>(&'a str);
-try_from_regex!(PlainPassword<'a>,
-                PASSWORD_REGEX =>
-                (PlainPassword, ValidationError::InvalidPassword));
+
+impl_try_from! {
+    impl<'a> TryFrom<&'a str> for PlainPassword<'a> {
+        @PASSWORD_REGEX => PlainPassword | InvalidPassword
+    }
+}
 
 /// A valid (well formatted) title
 ///
@@ -66,9 +51,12 @@ try_from_regex!(PlainPassword<'a>,
 /// constructed through `try_into`.
 #[derive(Serialize, PartialEq, PartialOrd, Eq, Ord, Debug, Copy, Clone)]
 pub struct Title<'a>(&'a str);
-try_from_regex!(Title<'a>,
-                TITLE_REGEX =>
-                (Title, ValidationError::InvalidTitle));
+
+impl_try_from! {
+    impl<'a> TryFrom<&'a str> for Title<'a> {
+        |s: &'a str| s.len() > 4 && s.len() < 80 => Title | InvalidTitle
+    }
+}
 
 impl<'a> Display for Title<'a> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
@@ -82,9 +70,12 @@ impl<'a> Display for Title<'a> {
 /// constructed through `try_into`.
 #[derive(Serialize, PartialEq, PartialOrd, Eq, Ord, Debug, Copy, Clone)]
 pub struct Description<'a>(&'a str);
-try_from_regex!(Description<'a>,
-                DESCRIPTION_REGEX =>
-                (Description, ValidationError::InvalidDescription));
+
+impl_try_from! {
+    impl<'a> TryFrom<&'a str> for Description<'a> {
+        |s: &'a str| s.len() > 4 && s.len() < 80 => Description | InvalidDescription
+    }
+}
 
 impl<'a> Display for Description<'a> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
@@ -98,9 +89,12 @@ impl<'a> Display for Description<'a> {
 /// constructed through `try_into`.
 #[derive(Serialize, PartialEq, PartialOrd, Eq, Ord, Debug, Copy, Clone)]
 pub struct CommentContent<'a>(&'a str);
-try_from_regex!(CommentContent<'a>,
-                COMMENT_CONTENT_REGEX =>
-                (CommentContent, ValidationError::InvalidCommentContent));
+
+impl_try_from! {
+    impl<'a> TryFrom<&'a str> for CommentContent<'a> {
+        |s: &'a str| s.len() > 4 && s.len() < 80 => CommentContent | InvalidCommentContent
+    }
+}
 
 impl<'a> Display for CommentContent<'a> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
@@ -114,9 +108,12 @@ impl<'a> Display for CommentContent<'a> {
 /// constructed through `try_into`.
 #[derive(Serialize, PartialEq, PartialOrd, Eq, Ord, Debug, Copy, Clone)]
 pub struct Email<'a>(&'a str);
-try_from_regex!(Email<'a>,
-                EMAIL_REGEX =>
-                (Email, ValidationError::InvalidEmail));
+
+impl_try_from! {
+    impl<'a> TryFrom<&'a str> for Email<'a> {
+        @EMAIL_REGEX => Email | InvalidEmail
+    }
+}
 
 impl<'a> Display for Email<'a> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {

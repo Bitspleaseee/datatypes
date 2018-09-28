@@ -1,27 +1,10 @@
 //! Validated IDs (a direct referece to a database item)
 
+// TODO add tests which vertify `TryFrom` implementations
+
 use super::ValidationError;
 use std::convert::TryFrom;
 use std::hash::Hash;
-
-macro_rules! id_impls {
-    ($ty:ty, $exp:expr, $inner:ty) => {
-        impl Id for $ty {
-            type I = $inner;
-            fn inner(&self) -> Self::I {
-                self.0
-            }
-        }
-        impl<'a> TryFrom<&'a str> for $ty {
-            type Error = ValidationError;
-            fn try_from(s: &'a str) -> Result<Self, Self::Error> {
-                s.parse::<$inner>()
-                    .map($exp)
-                    .map_err(|_| ValidationError::InvalidId)
-            }
-        }
-    };
-}
 
 /// Any value which is used as an ID should implement this trait
 ///
