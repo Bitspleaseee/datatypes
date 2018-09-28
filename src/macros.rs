@@ -2,6 +2,9 @@
 /// generates a `TryFrom` based on if the field is required, optional or
 /// doesn't need to be validated.
 ///
+/// There can only be ONE macro innvocation per scope as it generates two
+/// modules, `raw` and `valid` which will contain the types.
+///
 /// # Example usage
 ///
 /// ```rust,ignore
@@ -24,6 +27,7 @@
 #[macro_export]
 macro_rules! raw_to_valid {
     (
+        $(
         $( #[ $( $raw_atr:meta ),* ] )*
         pub struct $rawi:ident $( < $( $rlif:lifetime ),+ > )*;
 
@@ -48,71 +52,82 @@ macro_rules! raw_to_valid {
                 )*
             )*
         }
+        )+
     ) => {
-        $( #[ $( $raw_atr ),* ] )*
-        pub struct $rawi $( < $( $lif ),+ > )* {
-            $(
-                $( $field: $raw_field_type, )*
+        pub mod raw {
+        $(
+            $( #[ $( $raw_atr ),* ] )*
+            pub struct $rawi $( < $( $lif ),+ > )* {
                 $(
-                    $( $no_field: $no_field_type, )*
-                )*
-            )*
-            $(
-                $( $opt_field: Option<$opt_raw_field_type>, )*
-                $(
-                    $( $opt_no_field: Option<$opt_no_field_type>, )*
-                )*
-            )*
-        }
-
-        $( #[ $( $valid_atr ),* ] )*
-        /// NB this type should only be created with `try_into` because all the
-        /// fields are automatically validated
-        pub struct $validi $( < $( $lif ),+ > )* {
-            $(
-                $( $field: $valid_field_type, )*
-                $(
-                    $( $no_field: $no_new_type, )*
-                )*
-            )*
-            $(
-                $( $opt_field: Option<$opt_valid_field_type>, )*
-                $(
-                    $( $opt_no_field: Option<$opt_no_new_type>, )*
-                )*
-            )*
-        }
-
-        impl $( < $( $lif ),+ > )* TryFrom<$raw_ty> for $valid_ty {
-            type Error = ValidationError;
-            fn try_from(p: $raw_ty) -> Result<Self, Self::Error> {
-                $(
-                    $( let $field: $valid_field_type = p.$field.try_into()?; )*
+                    $( pub $field: $raw_field_type, )*
                     $(
-                        $( let $no_field: $no_new_type = p.$no_field.into(); )*
+                        $( pub $no_field: $no_field_type, )*
                     )*
                 )*
                 $(
-                    $( let $opt_field: Option<$opt_valid_field_type> = p.$opt_field.map(|i| i.try_into()).transpose()?; )*
+                    $( pub $opt_field: Option<$opt_raw_field_type>, )*
                     $(
-                        $( let $opt_no_field: Option<$opt_no_new_type> = p.$opt_no_field.map(|n| n.into()); )*
+                        $( pub $opt_no_field: Option<$opt_no_field_type>, )*
                     )*
                 )*
-                Ok($validi {
-                $(
-                    $( $field, )*
-                    $(
-                        $( $no_field, )*
-                    )*
-                )*
-                $(
-                    $( $opt_field, )*
-                    $(
-                        $( $opt_no_field, )*
-                    )*
-                )*
-                })
             }
+        )+
+        }
+
+        pub mod valid {
+            use super::*;
+        $(
+            $( #[ $( $valid_atr ),* ] )*
+            /// NB this type should only be created with `try_into` because all the
+            /// fields are automatically validated
+            pub struct $validi $( < $( $lif ),+ > )* {
+                $(
+                    $( $field: $valid_field_type, )*
+                    $(
+                        $( $no_field: $no_new_type, )*
+                    )*
+                )*
+                $(
+                    $( $opt_field: Option<$opt_valid_field_type>, )*
+                    $(
+                        $( $opt_no_field: Option<$opt_no_new_type>, )*
+                    )*
+                )*
+            }
+
+            use super::$rawi;
+            impl $( < $( $lif ),+ > )* TryFrom<$raw_ty> for $valid_ty {
+                type Error = ValidationError;
+                fn try_from(p: raw::$rawi $( < $( $lif ),+ > )*) -> Result<Self, Self::Error> {
+                    $(
+                        $( let $field: $valid_field_type = p.$field.try_into()?; )*
+                        $(
+                            $( let $no_field: $no_new_type = p.$no_field.into(); )*
+                        )*
+                    )*
+                    $(
+                        $( let $opt_field: Option<$opt_valid_field_type> = p.$opt_field.map(|i| i.try_into()).transpose()?; )*
+                        $(
+                            $( let $opt_no_field: Option<$opt_no_new_type> = p.$opt_no_field.map(|n| n.into()); )*
+                        )*
+                    )*
+                    Ok(valid::$validi {
+                    $(
+                        $( $field, )*
+                        $(
+                            $( $no_field, )*
+                        )*
+                    )*
+                    $(
+                        $( $opt_field, )*
+                        $(
+                            $( $opt_no_field, )*
+                        )*
+                    )*
+                    })
+                }
+            }
+        )+
         }
     }
 }

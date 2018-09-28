@@ -5,6 +5,9 @@ use crate::valid::ids::*;
 use crate::valid::ValidationError;
 use std::convert::{TryFrom, TryInto};
 
+use self::raw::*;
+use self::valid::*;
+
 #[derive(Serialize, Deserialize, Debug)]
 #[serde(
     tag = "type",
@@ -46,19 +49,19 @@ pub enum ContentRequests<'a> {
 impl<'a> TryFrom<RawContentRequests<'a>> for ContentRequests<'a> {
     type Error = ValidationError;
     fn try_from(raw: RawContentRequests<'a>) -> Result<Self, Self::Error> {
-        use self::ContentRequests as Pure;
+        use self::ContentRequests as Valid;
         use self::RawContentRequests as Raw;
         match raw {
-            Raw::AddCategory(p) => p.try_into().map(Pure::AddCategory),
-            Raw::EditCategory(p) => p.try_into().map(Pure::EditCategory),
-            Raw::HideCategory(p) => p.try_into().map(Pure::HideCategory),
-            Raw::AddThread(p) => p.try_into().map(Pure::AddThread),
-            Raw::EditThread(p) => p.try_into().map(Pure::EditThread),
-            Raw::HideThread(p) => p.try_into().map(Pure::HideThread),
-            Raw::AddComment(p) => p.try_into().map(Pure::AddComment),
-            Raw::EditComment(p) => p.try_into().map(Pure::EditComment),
-            Raw::HideComment(p) => p.try_into().map(Pure::HideComment),
-            Raw::UploadAvatar(p) => p.try_into().map(Pure::UploadAvatar),
+            Raw::AddCategory(p) => p.try_into().map(Valid::AddCategory),
+            Raw::EditCategory(p) => p.try_into().map(Valid::EditCategory),
+            Raw::HideCategory(p) => p.try_into().map(Valid::HideCategory),
+            Raw::AddThread(p) => p.try_into().map(Valid::AddThread),
+            Raw::EditThread(p) => p.try_into().map(Valid::EditThread),
+            Raw::HideThread(p) => p.try_into().map(Valid::HideThread),
+            Raw::AddComment(p) => p.try_into().map(Valid::AddComment),
+            Raw::EditComment(p) => p.try_into().map(Valid::EditComment),
+            Raw::HideComment(p) => p.try_into().map(Valid::HideComment),
+            Raw::UploadAvatar(p) => p.try_into().map(Valid::UploadAvatar),
         }
     }
 }
@@ -77,9 +80,7 @@ raw_to_valid! {
             title: &'a str => Title<'a>,
             description: &'a str => Description<'a>
     }
-}
 
-raw_to_valid! {
     #[derive(Serialize, Deserialize, PartialEq, Debug)]
     #[serde(rename = "payload")]
     pub struct RawEditCategoryPayload<'a>;
@@ -93,9 +94,7 @@ raw_to_valid! {
             title: &'a str => Title<'a>,
             description: &'a str => Description<'a>
     }
-}
 
-raw_to_valid! {
     #[derive(Serialize, Deserialize, PartialEq, Debug)]
     #[serde(rename = "payload")]
     pub struct RawHideCategoryPayload;
@@ -109,9 +108,7 @@ raw_to_valid! {
         >-> no-validate
             hidden: bool => bool
     }
-}
 
-raw_to_valid! {
     #[derive(Serialize, Deserialize, PartialEq, Debug)]
     #[serde(rename = "payload")]
     pub struct RawAddThreadPayload<'a>;
@@ -129,9 +126,7 @@ raw_to_valid! {
             user_id: u32 => UserId,
             timestamp: i64 => i64
     }
-}
 
-raw_to_valid! {
     #[derive(Serialize, Deserialize, PartialEq, Debug)]
     #[serde(rename = "payload")]
     pub struct RawEditThreadPayload<'a>;
@@ -145,9 +140,7 @@ raw_to_valid! {
             title: &'a str => Title<'a>,
             description: &'a str => Description<'a>
     }
-}
 
-raw_to_valid! {
     #[derive(Serialize, Deserialize, PartialEq, Debug)]
     #[serde(rename = "payload")]
     pub struct RawHideThreadPayload;
@@ -161,9 +154,7 @@ raw_to_valid! {
         >-> no-validate
             hidden: bool => bool
     }
-}
 
-raw_to_valid! {
     #[derive(Serialize, Deserialize, PartialEq, Debug)]
     #[serde(rename = "payload")]
     pub struct RawAddCommentPayload<'a>;
@@ -184,9 +175,7 @@ raw_to_valid! {
         >-> no-validate
             parent_id: u32 => CommentId
     }
-}
 
-raw_to_valid! {
     #[derive(Serialize, Deserialize, PartialEq, Debug)]
     #[serde(rename = "payload")]
     pub struct RawEditCommentPayload<'a>;
@@ -200,9 +189,7 @@ raw_to_valid! {
             title: &'a str => Title<'a>,
             content: &'a str => CommentContent<'a>
     }
-}
 
-raw_to_valid! {
     #[derive(Serialize, Deserialize, PartialEq, Debug)]
     #[serde(rename = "payload")]
     pub struct RawHideCommentPayload;
@@ -216,9 +203,7 @@ raw_to_valid! {
         >-> no-validate
             hidden: bool => bool
     }
-}
 
-raw_to_valid! {
     #[derive(Serialize, Deserialize, PartialEq, Debug)]
     #[serde(rename = "payload")]
     pub struct RawUploadAvatarPayload<'a>;
