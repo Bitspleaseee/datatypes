@@ -2,7 +2,7 @@
 
 // TODO populate responses with proper payloads
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Debug)]
 #[serde(
     tag = "type",
     content = "payload",
@@ -17,7 +17,7 @@ pub enum ContentRequestSuccess {
     SingleComment,
 }
 
-#[derive(Fail, Serialize, Deserialize, Debug)]
+#[derive(Fail, Serialize, Debug)]
 #[serde(
     tag = "type",
     content = "payload",
@@ -35,3 +35,4 @@ pub enum ContentRequestError {
     #[fail(display = "passed invalid query")]
     InvalidQuery,
 }
+

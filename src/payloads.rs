@@ -109,7 +109,7 @@ pub type EmptyPayload = Option<EmptyPayloadStrict>;
 ///     assert_eq!(expt, payload);
 /// }
 /// ```
-#[derive(Serialize, Deserialize, PartialEq, PartialOrd, Debug)]
+#[derive(Serialize, PartialEq, PartialOrd, Debug)]
 #[serde(rename = "payload")]
 pub struct AuthPayload<Inner, Token> {
     token: Token,
@@ -151,5 +151,38 @@ impl<Inner, Token> Deref for AuthPayload<Inner, Token> {
 impl<Inner, Token> DerefMut for AuthPayload<Inner, Token> {
     fn deref_mut(&mut self) -> &mut Self::Target {
         &mut self.inner
+    }
+}
+
+/// A payload which contains a list of inner items
+///
+/// This is useful to wrap a return type which should return a array of items.
+#[derive(Serialize, PartialEq, PartialOrd, Debug)]
+#[serde(rename = "payload")]
+pub struct MultiplePayload<Inner>(Vec<Inner>);
+
+impl<Inner> MultiplePayload<Inner> {
+    pub fn new(i: impl Into<Vec<Inner>>) -> MultiplePayload<Inner> {
+        MultiplePayload(i.into())
+    }
+
+    pub fn into_inner(self) -> Vec<Inner> {
+        self.0
+    }
+    pub fn set_inner(&mut self, i: impl Into<Vec<Inner>>) -> Vec<Inner> {
+        std::mem::replace(&mut self.0, i.into())
+    }
+}
+
+impl<Inner> Deref for MultiplePayload<Inner> {
+    type Target = Vec<Inner>;
+    fn deref(&self) -> &Self::Target {
+        &self.0
+    }
+}
+
+impl<Inner> DerefMut for MultiplePayload<Inner> {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.0
     }
 }
