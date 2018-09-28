@@ -95,10 +95,12 @@ macro_rules! raw_to_valid {
                 )*
             }
 
-            use super::$rawi;
-            impl $( < $( $lif ),+ > )* TryFrom<$raw_ty> for $valid_ty {
-                type Error = ValidationError;
+            use super::raw::$rawi;
+            impl $( < $( $lif ),+ > )* std::convert::TryFrom<$raw_ty> for $valid_ty {
+                type Error = $crate::valid::ValidationError;
                 fn try_from(p: raw::$rawi $( < $( $lif ),+ > )*) -> Result<Self, Self::Error> {
+                    #[allow(unused_imports)]
+                    use std::convert::TryInto;
                     $(
                         $( let $field: $valid_field_type = p.$field.try_into()?; )*
                         $(

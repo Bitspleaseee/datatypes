@@ -14,7 +14,7 @@ use self::valid::*;
     content = "payload",
     rename_all = "SCREAMING_SNAKE_CASE"
 )]
-pub enum RawContentRequests<'a> {
+pub enum RawContentRequest<'a> {
     AddCategory(#[serde(borrow)] RawAddCategoryPayload<'a>),
     EditCategory(#[serde(borrow)] RawEditCategoryPayload<'a>),
     HideCategory(RawHideCategoryPayload),
@@ -33,7 +33,7 @@ pub enum RawContentRequests<'a> {
     content = "payload",
     rename_all = "SCREAMING_SNAKE_CASE"
 )]
-pub enum ContentRequests<'a> {
+pub enum ContentRequest<'a> {
     AddCategory(#[serde(borrow)] AddCategoryPayload<'a>),
     EditCategory(#[serde(borrow)] EditCategoryPayload<'a>),
     HideCategory(HideCategoryPayload),
@@ -46,11 +46,11 @@ pub enum ContentRequests<'a> {
     UploadAvatar(#[serde(borrow)] UploadAvatarPayload<'a>),
 }
 
-impl<'a> TryFrom<RawContentRequests<'a>> for ContentRequests<'a> {
+impl<'a> TryFrom<RawContentRequest<'a>> for ContentRequest<'a> {
     type Error = ValidationError;
-    fn try_from(raw: RawContentRequests<'a>) -> Result<Self, Self::Error> {
-        use self::ContentRequests as Valid;
-        use self::RawContentRequests as Raw;
+    fn try_from(raw: RawContentRequest<'a>) -> Result<Self, Self::Error> {
+        use self::ContentRequest as Valid;
+        use self::RawContentRequest as Raw;
         match raw {
             Raw::AddCategory(p) => p.try_into().map(Valid::AddCategory),
             Raw::EditCategory(p) => p.try_into().map(Valid::EditCategory),

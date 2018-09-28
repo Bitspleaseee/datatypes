@@ -27,7 +27,7 @@ use std::ops::{Deref, DerefMut};
 ///     "type": "SOME_TYPE"
 /// }
 /// ```
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, PartialEq, PartialOrd, Debug)]
 #[serde(rename = "payload")]
 pub struct EmptyPayloadStrict {}
 
@@ -109,7 +109,7 @@ pub type EmptyPayload = Option<EmptyPayloadStrict>;
 ///     assert_eq!(expt, payload);
 /// }
 /// ```
-#[derive(Serialize, PartialEq, PartialOrd, Debug)]
+#[derive(Serialize, Deserialize, PartialEq, PartialOrd, Debug)]
 #[serde(rename = "payload")]
 pub struct AuthPayload<Inner, Token> {
     token: Token,
