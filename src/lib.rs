@@ -18,5 +18,4 @@ pub mod macros;
 pub mod external;
 pub mod internal;
 pub mod payloads;
-pub mod raw;
 pub mod valid;
