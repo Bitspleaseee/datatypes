@@ -34,8 +34,8 @@ pub enum ContentRequestSuccess<'a> {
     rename_all = "SCREAMING_SNAKE_CASE"
 )]
 pub enum ContentRequestError {
-    #[fail(display = "content is hidden")]
-    Hidden,
+    #[fail(display = "content is missing or hidden")]
+    MissingContent,
     #[fail(display = "passed invalid id")]
     InvalidId,
     #[fail(display = "token missing from cookies")]
@@ -44,6 +44,8 @@ pub enum ContentRequestError {
     InvalidToken,
     #[fail(display = "passed invalid query")]
     InvalidQuery,
+    #[fail(display = "internal server error")]
+    ServerError,
 }
 
 #[derive(Serialize, Deserialize, Debug, PartialEq)]
