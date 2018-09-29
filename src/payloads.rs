@@ -73,7 +73,7 @@ pub type EmptyPayload = Option<EmptyPayloadStrict>;
 /// # Example usage
 ///
 /// ```
-/// # use datatypes::payloads::AuthPayload;
+/// # use datatypes::payloads::TokenPayload;
 /// # #[macro_use]
 /// # extern crate serde_derive;
 /// #[derive(Serialize, Deserialize, PartialEq, Debug)]
@@ -85,7 +85,7 @@ pub type EmptyPayload = Option<EmptyPayloadStrict>;
 /// #[derive(Serialize, Deserialize, PartialEq, Debug)]
 /// struct UserToken(u32);
 ///
-/// type AuthUserPayload<'a> = AuthPayload<UserPayload<'a>, UserToken>;
+/// type AuthUserPayload<'a> = TokenPayload<UserPayload<'a>, UserToken>;
 ///
 /// fn main() {
 ///
@@ -109,15 +109,15 @@ pub type EmptyPayload = Option<EmptyPayloadStrict>;
 /// }
 /// ```
 #[derive(Serialize, Deserialize, PartialEq, PartialOrd, Debug)]
-pub struct AuthPayload<Inner, Token> {
+pub struct TokenPayload<Inner, Token> {
     token: Token,
     #[serde(flatten)]
     inner: Inner,
 }
 
-impl<Inner, Token> AuthPayload<Inner, Token> {
-    pub fn new(i: impl Into<Inner>, t: impl Into<Token>) -> AuthPayload<Inner, Token> {
-        AuthPayload {
+impl<Inner, Token> TokenPayload<Inner, Token> {
+    pub fn new(i: impl Into<Inner>, t: impl Into<Token>) -> TokenPayload<Inner, Token> {
+        TokenPayload {
             inner: i.into(),
             token: t.into(),
         }
@@ -139,14 +139,14 @@ impl<Inner, Token> AuthPayload<Inner, Token> {
     }
 }
 
-impl<Inner, Token> Deref for AuthPayload<Inner, Token> {
+impl<Inner, Token> Deref for TokenPayload<Inner, Token> {
     type Target = Inner;
     fn deref(&self) -> &Self::Target {
         &self.inner
     }
 }
 
-impl<Inner, Token> DerefMut for AuthPayload<Inner, Token> {
+impl<Inner, Token> DerefMut for TokenPayload<Inner, Token> {
     fn deref_mut(&mut self) -> &mut Self::Target {
         &mut self.inner
     }

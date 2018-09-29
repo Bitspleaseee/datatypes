@@ -13,6 +13,8 @@ extern crate lazy_static;
 extern crate chrono;
 extern crate regex;
 
+pub type Token = u32;
+
 #[macro_use]
 pub mod macros;
 pub mod auth;

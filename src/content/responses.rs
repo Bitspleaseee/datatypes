@@ -1,7 +1,12 @@
 //! The responses a user will get on requests to the content-database
 
+use crate::payloads::TokenPayload;
 use crate::valid::fields::*;
 use crate::valid::ids::*;
+use crate::Token;
+
+pub type IntContentRequestSuccess<'a> = TokenPayload<ContentRequestSuccess<'a>, Token>;
+pub type IntContentRequestError = TokenPayload<ContentRequestError, Token>;
 
 /// All the successful responses to a `ContentRequest`
 #[derive(Serialize, Deserialize, Debug)]

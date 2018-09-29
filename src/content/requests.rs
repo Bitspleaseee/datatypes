@@ -1,7 +1,11 @@
 //! The requests a user can make to the content-database
 
+use crate::payloads::TokenPayload;
 use crate::valid::fields::*;
 use crate::valid::ids::*;
+use crate::Token;
+
+pub type IntContentRequest<'a> = TokenPayload<ContentRequest<'a>, Token>;
 
 #[derive(Serialize, Deserialize, Debug)]
 #[serde(

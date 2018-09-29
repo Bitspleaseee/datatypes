@@ -1,7 +1,11 @@
 //! The requests a user can send to the auth-service
 
 use crate::payloads::EmptyPayload;
+use crate::payloads::TokenPayload;
 use crate::valid::fields::*;
+use crate::Token;
+
+pub type IntAuthRequest<'a> = TokenPayload<AuthRequest<'a>, Token>;
 
 #[derive(Serialize, Deserialize)]
 #[serde(

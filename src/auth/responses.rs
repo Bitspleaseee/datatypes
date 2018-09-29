@@ -1,5 +1,11 @@
 //! The responses a user will get from requests to the auth-service
 
+use crate::payloads::TokenPayload;
+use crate::Token;
+
+pub type IntAuthSuccess = TokenPayload<AuthSuccess, Token>;
+pub type IntAuthError = TokenPayload<AuthError, Token>;
+
 // TODO decide if the responses should have a payload
 
 #[derive(Serialize, Deserialize, Debug)]
