@@ -3,6 +3,7 @@
 // TODO add tests which vertifies the `TryFrom` implementations
 
 use super::ValidationError::*;
+use serde::de::{self, Deserialize, Deserializer};
 use std::convert::TryFrom;
 use std::fmt::{self, Display};
 
@@ -19,6 +20,16 @@ pub struct Username<'a>(&'a str);
 impl_try_from! {
     impl<'a> TryFrom<&'a str> for Username<'a> {
         @USERNAME_REGEX => Username | InvalidUsername
+    }
+}
+
+impl<'de: 'a, 'a> Deserialize<'de> for Username<'a> {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: Deserializer<'de>,
+    {
+        let s = <&'de str as Deserialize>::deserialize(deserializer)?;
+        Username::try_from(s).map_err(de::Error::custom)
     }
 }
 
@@ -45,6 +56,16 @@ impl_try_from! {
     }
 }
 
+impl<'de: 'a, 'a> Deserialize<'de> for PlainPassword<'a> {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: Deserializer<'de>,
+    {
+        let s = <&'de str as Deserialize>::deserialize(deserializer)?;
+        PlainPassword::try_from(s).map_err(de::Error::custom)
+    }
+}
+
 /// A valid (well formatted) title
 ///
 /// NB This type does **not** implement `Deserialize` because it should only be
@@ -55,6 +76,16 @@ pub struct Title<'a>(&'a str);
 impl_try_from! {
     impl<'a> TryFrom<&'a str> for Title<'a> {
         |s: &'a str| s.len() > 4 && s.len() < 80 => Title | InvalidTitle
+    }
+}
+
+impl<'de: 'a, 'a> Deserialize<'de> for Title<'a> {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: Deserializer<'de>,
+    {
+        let s = <&'de str as Deserialize>::deserialize(deserializer)?;
+        Title::try_from(s).map_err(de::Error::custom)
     }
 }
 
@@ -77,6 +108,15 @@ impl_try_from! {
     }
 }
 
+impl<'de: 'a, 'a> Deserialize<'de> for Description<'a> {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: Deserializer<'de>,
+    {
+        let s = <&'de str as Deserialize>::deserialize(deserializer)?;
+        Description::try_from(s).map_err(de::Error::custom)
+    }
+}
 impl<'a> Display for Description<'a> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.0)
@@ -96,6 +136,16 @@ impl_try_from! {
     }
 }
 
+impl<'de: 'a, 'a> Deserialize<'de> for CommentContent<'a> {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: Deserializer<'de>,
+    {
+        let s = <&'de str as Deserialize>::deserialize(deserializer)?;
+        CommentContent::try_from(s).map_err(de::Error::custom)
+    }
+}
+
 impl<'a> Display for CommentContent<'a> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.0)
@@ -112,6 +162,16 @@ pub struct Email<'a>(&'a str);
 impl_try_from! {
     impl<'a> TryFrom<&'a str> for Email<'a> {
         @EMAIL_REGEX => Email | InvalidEmail
+    }
+}
+
+impl<'de: 'a, 'a> Deserialize<'de> for Email<'a> {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: Deserializer<'de>,
+    {
+        let s = <&'de str as Deserialize>::deserialize(deserializer)?;
+        Email::try_from(s).map_err(de::Error::custom)
     }
 }
 
