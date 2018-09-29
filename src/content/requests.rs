@@ -27,7 +27,7 @@ pub struct AddCategoryPayload<'a> {
     #[serde(borrow)]
     title: Title<'a>,
     #[serde(borrow)]
-    description: Description<'a>
+    description: Description<'a>,
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
@@ -35,12 +35,12 @@ pub struct EditCategoryPayload<'a> {
     #[serde(borrow)]
     title: Option<Title<'a>>,
     #[serde(borrow)]
-    description: Option<Description<'a>>
+    description: Option<Description<'a>>,
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 pub struct HideCategoryPayload {
-    hide: bool
+    hide: bool,
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
@@ -51,7 +51,7 @@ pub struct AddThreadPayload<'a> {
     title: Title<'a>,
     #[serde(borrow)]
     description: Description<'a>,
-    timestamp: i64 // TODO change to chrono type?
+    timestamp: i64, // TODO change to chrono type?
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
@@ -64,7 +64,7 @@ pub struct EditThreadPayload<'a> {
 
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 pub struct HideThreadPayload {
-    hide: bool
+    hide: bool,
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
@@ -74,7 +74,7 @@ pub struct AddCommentPayload<'a> {
     parent_id: Option<CommentId>,
     #[serde(borrow)]
     content: CommentContent<'a>,
-    timestamp: i64 // TODO change to chrono type?
+    timestamp: i64, // TODO change to chrono type?
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
@@ -85,11 +85,11 @@ pub struct EditCommentPayload<'a> {
 
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 pub struct HideCommentPayload {
-    hide: bool
+    hide: bool,
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 pub struct UploadAvatarPayload<'a> {
     #[serde(borrow)]
-    avatar: &'a str
+    avatar: &'a str,
 }

@@ -15,7 +15,8 @@ extern crate regex;
 
 #[macro_use]
 pub mod macros;
-pub mod external;
-pub mod internal;
+pub mod auth;
+pub mod content;
+pub mod error;
 pub mod payloads;
 pub mod valid;

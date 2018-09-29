@@ -30,5 +30,5 @@ pub struct RegisterUserPayload<'a> {
     #[serde(borrow)]
     password: PlainPassword<'a>,
     #[serde(borrow)]
-    email: Email<'a>
+    email: Email<'a>,
 }

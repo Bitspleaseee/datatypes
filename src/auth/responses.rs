@@ -14,7 +14,7 @@ pub enum AuthSuccess {
     UserRegistered,
 }
 
-#[derive(Fail, Serialize, Deserialize, Debug)]
+#[derive(Fail, Serialize, Deserialize, PartialEq, Clone, Copy, Debug)]
 #[serde(
     tag = "type",
     content = "payload",

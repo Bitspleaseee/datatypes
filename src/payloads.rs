@@ -28,7 +28,6 @@ use std::ops::{Deref, DerefMut};
 /// }
 /// ```
 #[derive(Serialize, Deserialize, PartialEq, PartialOrd, Debug)]
-#[serde(rename = "payload")]
 pub struct EmptyPayloadStrict {}
 
 /// A payload which can either be present and empty or not present
@@ -110,7 +109,6 @@ pub type EmptyPayload = Option<EmptyPayloadStrict>;
 /// }
 /// ```
 #[derive(Serialize, Deserialize, PartialEq, PartialOrd, Debug)]
-#[serde(rename = "payload")]
 pub struct AuthPayload<Inner, Token> {
     token: Token,
     #[serde(flatten)]

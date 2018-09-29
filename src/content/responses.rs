@@ -22,7 +22,7 @@ pub enum ContentRequestSuccess<'a> {
 }
 
 /// All the unsuccessful responses to a `ContentRequest`
-#[derive(Fail, Serialize, Deserialize, PartialEq, PartialOrd, Debug)]
+#[derive(Fail, Serialize, Deserialize, PartialEq, Clone, Copy, Debug)]
 #[serde(
     tag = "type",
     content = "payload",
@@ -59,7 +59,7 @@ pub struct ThreadPayload<'a> {
     title: Title<'a>,
     #[serde(borrow)]
     description: Description<'a>,
-    timestamp: i64 // TODO change to chrono type?
+    timestamp: i64, // TODO change to chrono type?
 }
 
 #[derive(Serialize, Deserialize, Debug, PartialEq)]
@@ -72,7 +72,7 @@ pub struct CommentPayload<'a> {
     title: Title<'a>,
     #[serde(borrow)]
     description: Description<'a>,
-    timestamp: i64 // TODO change to chrono type?
+    timestamp: i64, // TODO change to chrono type?
 }
 
 #[derive(Serialize, Deserialize, Debug, PartialEq)]
@@ -83,5 +83,5 @@ pub struct UserPayload<'a> {
     #[serde(borrow)]
     description: Description<'a>,
     #[serde(borrow)]
-    avatar: &'a str
+    avatar: &'a str,
 }
