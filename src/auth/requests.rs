@@ -4,6 +4,7 @@ use crate::payloads::EmptyPayload;
 use crate::payloads::TokenPayload;
 use crate::valid::fields::*;
 use crate::Token;
+use std::net::IpAddr;
 
 pub type IntAuthRequest<'a> = TokenPayload<AuthRequest<'a>, Token>;
 
@@ -17,6 +18,17 @@ pub enum AuthRequest<'a> {
     Authenticate(#[serde(borrow)] AuthRequestPayload<'a>),
     Deauthenticate(EmptyPayload),
     RegisterUser(#[serde(borrow)] RegisterUserPayload<'a>),
+}
+
+#[derive(Serialize, Deserialize)]
+#[serde(
+    tag = "type",
+    content = "payload",
+    rename_all = "SCREAMING_SNAKE_CASE"
+)]
+pub enum BanRequest {
+    Ban(BanUserPayload),
+    Unban(BanUserPayload),
 }
 
 #[derive(Serialize, Deserialize)]
@@ -35,4 +47,9 @@ pub struct RegisterUserPayload<'a> {
     password: PlainPassword<'a>,
     #[serde(borrow)]
     email: Email<'a>,
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct BanUserPayload {
+    ip: IpAddr,
 }
