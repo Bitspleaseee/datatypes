@@ -2,32 +2,8 @@
 
 use crate::valid::fields::*;
 use crate::valid::ids::*;
-use crate::valid::ValidationError;
-use std::convert::{TryFrom, TryInto};
-
-use self::raw::*;
-use self::valid::*;
 
 #[derive(Serialize, Deserialize, Debug)]
-#[serde(
-    tag = "type",
-    content = "payload",
-    rename_all = "SCREAMING_SNAKE_CASE"
-)]
-pub enum RawContentRequest<'a> {
-    AddCategory(#[serde(borrow)] RawAddCategoryPayload<'a>),
-    EditCategory(#[serde(borrow)] RawEditCategoryPayload<'a>),
-    HideCategory(RawHideCategoryPayload),
-    AddThread(#[serde(borrow)] RawAddThreadPayload<'a>),
-    EditThread(#[serde(borrow)] RawEditThreadPayload<'a>),
-    HideThread(RawHideThreadPayload),
-    AddComment(#[serde(borrow)] RawAddCommentPayload<'a>),
-    EditComment(#[serde(borrow)] RawEditCommentPayload<'a>),
-    HideComment(RawHideCommentPayload),
-    UploadAvatar(#[serde(borrow)] RawUploadAvatarPayload<'a>),
-}
-
-#[derive(Serialize, Debug)]
 #[serde(
     tag = "type",
     content = "payload",
@@ -46,233 +22,74 @@ pub enum ContentRequest<'a> {
     UploadAvatar(#[serde(borrow)] UploadAvatarPayload<'a>),
 }
 
-impl<'a> TryFrom<RawContentRequest<'a>> for ContentRequest<'a> {
-    type Error = ValidationError;
-    fn try_from(raw: RawContentRequest<'a>) -> Result<Self, Self::Error> {
-        use self::ContentRequest as Valid;
-        use self::RawContentRequest as Raw;
-        match raw {
-            Raw::AddCategory(p) => p.try_into().map(Valid::AddCategory),
-            Raw::EditCategory(p) => p.try_into().map(Valid::EditCategory),
-            Raw::HideCategory(p) => p.try_into().map(Valid::HideCategory),
-            Raw::AddThread(p) => p.try_into().map(Valid::AddThread),
-            Raw::EditThread(p) => p.try_into().map(Valid::EditThread),
-            Raw::HideThread(p) => p.try_into().map(Valid::HideThread),
-            Raw::AddComment(p) => p.try_into().map(Valid::AddComment),
-            Raw::EditComment(p) => p.try_into().map(Valid::EditComment),
-            Raw::HideComment(p) => p.try_into().map(Valid::HideComment),
-            Raw::UploadAvatar(p) => p.try_into().map(Valid::UploadAvatar),
-        }
-    }
+#[derive(Serialize, Deserialize, PartialEq, Debug)]
+pub struct AddCategoryPayload<'a> {
+    #[serde(borrow)]
+    title: Title<'a>,
+    #[serde(borrow)]
+    description: Description<'a>
 }
 
-raw_to_valid! {
-    #[derive(Serialize, Deserialize, PartialEq, Debug)]
-    #[serde(rename = "payload")]
-    pub struct RawAddCategoryPayload<'a>;
-
-    #[derive(Serialize, PartialEq, Debug)]
-    #[serde(rename = "payload")]
-    pub struct AddCategoryPayload<'a>;
-
-    impl<'a> TryFrom<RawAddCategoryPayload<'a>> for AddCategoryPayload<'a> {
-        > required
-            title: &'a str => Title<'a>,
-            description: &'a str => Description<'a>
-    }
-
-    #[derive(Serialize, Deserialize, PartialEq, Debug)]
-    #[serde(rename = "payload")]
-    pub struct RawEditCategoryPayload<'a>;
-
-    #[derive(Serialize, PartialEq, Debug)]
-    #[serde(rename = "payload")]
-    pub struct EditCategoryPayload<'a>;
-
-    impl<'a> TryFrom<RawEditCategoryPayload<'a>> for EditCategoryPayload<'a> {
-        > optional
-            title: &'a str => Title<'a>,
-            description: &'a str => Description<'a>
-    }
-
-    #[derive(Serialize, Deserialize, PartialEq, Debug)]
-    #[serde(rename = "payload")]
-    pub struct RawHideCategoryPayload;
-
-    #[derive(Serialize, PartialEq, Debug)]
-    #[serde(rename = "payload")]
-    pub struct HideCategoryPayload;
-
-    impl TryFrom<RawHideCategoryPayload> for HideCategoryPayload {
-        > required
-        >-> no-validate
-            hidden: bool => bool
-    }
-
-    #[derive(Serialize, Deserialize, PartialEq, Debug)]
-    #[serde(rename = "payload")]
-    pub struct RawAddThreadPayload<'a>;
-
-    #[derive(Serialize, PartialEq, Debug)]
-    #[serde(rename = "payload")]
-    pub struct AddThreadPayload<'a>;
-
-    impl<'a> TryFrom<RawAddThreadPayload<'a>> for AddThreadPayload<'a> {
-        > required
-            title: &'a str => Title<'a>,
-            description: &'a str => Description<'a>
-        >-> no-validate
-            category_id: u32 => CategoryId,
-            user_id: u32 => UserId,
-            timestamp: i64 => i64
-    }
-
-    #[derive(Serialize, Deserialize, PartialEq, Debug)]
-    #[serde(rename = "payload")]
-    pub struct RawEditThreadPayload<'a>;
-
-    #[derive(Serialize, PartialEq, Debug)]
-    #[serde(rename = "payload")]
-    pub struct EditThreadPayload<'a>;
-
-    impl<'a> TryFrom<RawEditThreadPayload<'a>> for EditThreadPayload<'a> {
-        > optional
-            title: &'a str => Title<'a>,
-            description: &'a str => Description<'a>
-    }
-
-    #[derive(Serialize, Deserialize, PartialEq, Debug)]
-    #[serde(rename = "payload")]
-    pub struct RawHideThreadPayload;
-
-    #[derive(Serialize, PartialEq, Debug)]
-    #[serde(rename = "payload")]
-    pub struct HideThreadPayload;
-
-    impl TryFrom<RawHideThreadPayload> for HideThreadPayload {
-        > required
-        >-> no-validate
-            hidden: bool => bool
-    }
-
-    #[derive(Serialize, Deserialize, PartialEq, Debug)]
-    #[serde(rename = "payload")]
-    pub struct RawAddCommentPayload<'a>;
-
-    #[derive(Serialize, PartialEq, Debug)]
-    #[serde(rename = "payload")]
-    pub struct AddCommentPayload<'a>;
-
-    impl<'a> TryFrom<RawAddCommentPayload<'a>> for AddCommentPayload<'a> {
-        > required
-            title: &'a str => Title<'a>,
-            content: &'a str => CommentContent<'a>
-        >-> no-validate
-            thread_id: u32 => ThreadId,
-            user_id: u32 => UserId,
-            timestamp: i64 => i64
-        > optional
-        >-> no-validate
-            parent_id: u32 => CommentId
-    }
-
-    #[derive(Serialize, Deserialize, PartialEq, Debug)]
-    #[serde(rename = "payload")]
-    pub struct RawEditCommentPayload<'a>;
-
-    #[derive(Serialize, PartialEq, Debug)]
-    #[serde(rename = "payload")]
-    pub struct EditCommentPayload<'a>;
-
-    impl<'a> TryFrom<RawEditCommentPayload<'a>> for EditCommentPayload<'a> {
-        > optional
-            title: &'a str => Title<'a>,
-            content: &'a str => CommentContent<'a>
-    }
-
-    #[derive(Serialize, Deserialize, PartialEq, Debug)]
-    #[serde(rename = "payload")]
-    pub struct RawHideCommentPayload;
-
-    #[derive(Serialize, PartialEq, Debug)]
-    #[serde(rename = "payload")]
-    pub struct HideCommentPayload;
-
-    impl TryFrom<RawHideCommentPayload> for HideCommentPayload {
-        > required
-        >-> no-validate
-            hidden: bool => bool
-    }
-
-    #[derive(Serialize, Deserialize, PartialEq, Debug)]
-    #[serde(rename = "payload")]
-    pub struct RawUploadAvatarPayload<'a>;
-
-    #[derive(Serialize, PartialEq, Debug)]
-    #[serde(rename = "payload")]
-    pub struct UploadAvatarPayload<'a>;
-
-    impl<'a> TryFrom<RawUploadAvatarPayload<'a>> for UploadAvatarPayload<'a> {
-        > required
-        >-> no-validate
-            user_id: u32 => UserId,
-            avatar: &'a str => &'a str
-    }
+#[derive(Serialize, Deserialize, PartialEq, Debug)]
+pub struct EditCategoryPayload<'a> {
+    #[serde(borrow)]
+    title: Option<Title<'a>>,
+    #[serde(borrow)]
+    description: Option<Description<'a>>
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
+#[derive(Serialize, Deserialize, PartialEq, Debug)]
+pub struct HideCategoryPayload {
+    hide: bool
+}
 
-    #[test]
-    fn raw_to_valid_edit_category() {
-        let raw = RawEditCategoryPayload {
-            title: None,
-            description: Some("a description"),
-        };
+#[derive(Serialize, Deserialize, PartialEq, Debug)]
+pub struct AddThreadPayload<'a> {
+    category_id: CategoryId,
+    user_id: UserId,
+    #[serde(borrow)]
+    title: Title<'a>,
+    #[serde(borrow)]
+    description: Description<'a>,
+    timestamp: i64 // TODO change to chrono type?
+}
 
-        let valid = EditCategoryPayload {
-            title: None,
-            description: Some("a description".try_into().unwrap()),
-        };
+#[derive(Serialize, Deserialize, PartialEq, Debug)]
+pub struct EditThreadPayload<'a> {
+    #[serde(borrow)]
+    title: Option<Title<'a>>,
+    #[serde(borrow)]
+    description: Option<Description<'a>>,
+}
 
-        let raw = raw.try_into().expect("raw should be valid");
-        assert_eq!(valid, raw);
-    }
+#[derive(Serialize, Deserialize, PartialEq, Debug)]
+pub struct HideThreadPayload {
+    hide: bool
+}
 
-    #[test]
-    fn raw_to_valid_add_category() {
-        let raw = RawAddCategoryPayload {
-            title: "Raw title",
-            description: "Raw description",
-        };
+#[derive(Serialize, Deserialize, PartialEq, Debug)]
+pub struct AddCommentPayload<'a> {
+    thread_id: ThreadId,
+    user_id: UserId,
+    parent_id: Option<CommentId>,
+    #[serde(borrow)]
+    content: CommentContent<'a>,
+    timestamp: i64 // TODO change to chrono type?
+}
 
-        let valid = AddCategoryPayload {
-            title: "Raw title".try_into().unwrap(),
-            description: "Raw description".try_into().unwrap(),
-        };
+#[derive(Serialize, Deserialize, PartialEq, Debug)]
+pub struct EditCommentPayload<'a> {
+    #[serde(borrow)]
+    content: CommentContent<'a>,
+}
 
-        let raw = raw.try_into().expect("raw should be valid");
-        assert_eq!(valid, raw);
-    }
-    #[test]
-    fn raw_to_valid_add_category_empty_title() {
-        let raw = RawAddCategoryPayload {
-            title: "",
-            description: "Raw description",
-        };
+#[derive(Serialize, Deserialize, PartialEq, Debug)]
+pub struct HideCommentPayload {
+    hide: bool
+}
 
-        let raw: Result<AddCategoryPayload, _> = raw.try_into();
-        assert_eq!(ValidationError::InvalidTitle, raw.unwrap_err());
-    }
-    #[test]
-    fn raw_to_valid_add_category_empty_description() {
-        let raw = RawAddCategoryPayload {
-            title: "Some title",
-            description: "",
-        };
-
-        let raw: Result<AddCategoryPayload, _> = raw.try_into();
-        assert_eq!(ValidationError::InvalidDescription, raw.unwrap_err());
-    }
+#[derive(Serialize, Deserialize, PartialEq, Debug)]
+pub struct UploadAvatarPayload<'a> {
+    #[serde(borrow)]
+    avatar: &'a str
 }

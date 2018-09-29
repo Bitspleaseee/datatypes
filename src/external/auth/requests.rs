@@ -1,8 +1,9 @@
 //! The requests a user can send to the auth-service
 
 use crate::payloads::EmptyPayload;
+use crate::valid::fields::*;
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize)]
 #[serde(
     tag = "type",
     content = "payload",
@@ -14,22 +15,20 @@ pub enum AuthRequest<'a> {
     RegisterUser(#[serde(borrow)] RegisterUserPayload<'a>),
 }
 
-#[derive(Serialize, Deserialize, Debug)]
-#[serde(rename = "payload")]
+#[derive(Serialize, Deserialize)]
 pub struct AuthRequestPayload<'a> {
-    #[serde(rename = "username")]
-    pub raw_username: &'a str,
-    #[serde(rename = "password")]
-    pub raw_password: &'a str,
+    #[serde(borrow)]
+    username: Username<'a>,
+    #[serde(borrow)]
+    password: PlainPassword<'a>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
-#[serde(rename = "payload")]
+#[derive(Serialize, Deserialize)]
 pub struct RegisterUserPayload<'a> {
-    #[serde(rename = "username")]
-    pub raw_username: &'a str,
-    #[serde(rename = "password")]
-    pub raw_password: &'a str,
-    #[serde(rename = "email")]
-    pub raw_email: &'a str,
+    #[serde(borrow)]
+    username: Username<'a>,
+    #[serde(borrow)]
+    password: PlainPassword<'a>,
+    #[serde(borrow)]
+    email: Email<'a>
 }
