@@ -31,8 +31,6 @@ pub enum AuthError {
     MissingTokenClient,
     #[fail(display = "server does not have provided token")]
     MissingTokenServer,
-    #[fail(display = "the token given is invalid")]
-    WrongToken,
     #[fail(display = "invalid username")]
     InvalidUsername,
     #[fail(display = "invalid password")]
