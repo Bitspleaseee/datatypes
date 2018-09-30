@@ -3,6 +3,8 @@
 // TODO add tests which vertifies the `TryFrom` implementations
 
 use super::ValidationError;
+use rocket::http::RawStr;
+use rocket::request::FromFormValue;
 use std::convert::TryFrom;
 use std::fmt::{self, Display};
 
@@ -177,5 +179,13 @@ impl_deserialize_with_try_from!(QueryStr);
 impl Display for QueryStr {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.0)
+    }
+}
+
+impl<'a> FromFormValue<'a> for QueryStr {
+    type Error = <QueryStr as TryFrom<String>>::Error;
+    fn from_form_value(search_str: &'a RawStr) -> Result<Self, Self::Error> {
+        let s: &'a str = search_str.as_ref();
+        QueryStr::try_from(s.to_string())
     }
 }

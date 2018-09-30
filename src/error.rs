@@ -1,37 +1,42 @@
-use crate::auth::responses::AuthError;
+//! A collection of all common errors
+
 use crate::admin::responses::AdminError;
+use crate::auth::responses::AuthError;
 use crate::content::responses::ContentError;
 
-#[derive(Fail, Serialize, Deserialize, PartialEq, Clone, Copy, Debug)]
+#[derive(Fail, Serialize, Deserialize, PartialEq, Debug)]
 #[serde(
     tag = "type",
     content = "payload",
     rename_all = "SCREAMING_SNAKE_CASE"
 )]
-pub enum ResponseError {
-    #[fail(display = "authentication request error")]
-    AuthenticationError(AuthError),
-    #[fail(display = "content request error")]
-    ContentRequestError(ContentError),
-    #[fail(display = "admin request error")]
-    AdminRequestError(AdminError),
+pub enum Error {
+    #[fail(display = "error specific to auth requests")]
+    AuthRequestError(#[cause] AuthError),
+    #[fail(display = "error specific to content requests")]
+    ContentRequestError(#[cause] ContentError),
+    #[fail(display = "error specific to admin requests")]
+    AdminRequestError(#[cause] AdminError),
+    #[fail(display = "user is not authenticated with the service")]
+    Unauthenticated,
+    #[fail(display = "user is not authorized to perform action")]
+    Unauthorized,
 }
 
-impl From<AuthError> for ResponseError {
+impl From<AuthError> for Error {
     fn from(e: AuthError) -> Self {
-        ResponseError::AuthenticationError(e)
+        Error::AuthRequestError(e)
     }
 }
 
-impl From<ContentError> for ResponseError {
+impl From<ContentError> for Error {
     fn from(e: ContentError) -> Self {
-        ResponseError::ContentRequestError(e)
+        Error::ContentRequestError(e)
     }
 }
 
-impl From<AdminError> for ResponseError {
+impl From<AdminError> for Error {
     fn from(e: AdminError) -> Self {
-        ResponseError::AdminRequestError(e)
+        Error::AdminRequestError(e)
     }
 }
-
