@@ -1,50 +1,22 @@
-/// A simple macro to make implementations of `TryFrom` easier to user for
-/// either closures or regexes
-///
-/// Use a '@' infront of a regex and the closure will recieve the `&'a str` as
-/// the first and only argument
+/// A convenience macro to implement deserialize for a item which validates the
+/// contents of the string with `TryInto`
 #[macro_export]
-macro_rules! impl_try_from {
-    (
-        impl<'a $(,)* $( $lif:lifetime ),* > TryFrom<&'a str> for $ty:ty {
-           $cls:expr => $cons:ident | $err:expr
-        }
-    ) => {
-        impl<'a, $( $lif ),* > TryFrom<&'a str> for $ty {
-            type Error = crate::valid::ValidationError;
-            fn try_from(s: &'a str) -> Result<Self, Self::Error> {
-                if ($cls)(s) {
-                    Ok($cons(s))
-                } else {
-                    Err($err)
-                }
+macro_rules! impl_deserialize_with_try_from {
+    ($ident:ident) => {
+        impl<'de> serde::de::Deserialize<'de> for $ident {
+            fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+            where
+                D: serde::de::Deserializer<'de>,
+            {
+                use serde::de::Deserialize;
+                let s = String::deserialize(deserializer)?;
+                $ident::try_from(s).map_err(serde::de::Error::custom)
             }
         }
     };
-    (
-        impl<'a $(,)* $( $lif:lifetime ),* > TryFrom<&'a str> for $ty:ty {
-            @$regex:expr => $cons:ident | $err:expr
-        }
-    ) => {
-        impl<'a, $( $lif ),* > TryFrom<&'a str> for $ty {
-            type Error = crate::valid::ValidationError;
-            fn try_from(s: &'a str) -> Result<Self, Self::Error> {
-                lazy_static! {
-                    static ref RE: Regex =
-                        Regex::new($regex).expect(&format!("regex '{}' is invalid", $regex));
-                }
-                if RE.is_match(s) {
-                    Ok($cons(s))
-                } else {
-                    Err($err)
-                }
-            }
-        }
-    }
-
 }
 
-/// Generates `TryFrom<&'a str>` and `Id` impls for ids
+/// Generates `TryFrom<&'a str>`, `FromParam`, `From<Inner>` and `Id` impls for ids
 #[macro_export]
 macro_rules! id_impls {
     ($ty:ty, $exp:expr, $inner:ty) => {
@@ -54,9 +26,9 @@ macro_rules! id_impls {
                 self.0
             }
         }
-        impl<'a> TryFrom<&'a str> for $ty {
+        impl TryFrom<&str> for $ty {
             type Error = ValidationError;
-            fn try_from(s: &'a str) -> Result<Self, Self::Error> {
+            fn try_from(s: &str) -> Result<Self, Self::Error> {
                 s.parse::<$inner>()
                     .map($exp)
                     .map_err(|_| ValidationError::InvalidId)

@@ -5,7 +5,7 @@ use crate::valid::fields::*;
 use crate::valid::ids::*;
 use crate::Token;
 
-pub type IntContentSuccess<'a> = TokenPayload<ContentSuccess<'a>, Token>;
+pub type IntContentSuccess = TokenPayload<ContentSuccess, Token>;
 pub type IntContentError = TokenPayload<ContentError, Token>;
 
 /// All the successful responses to a `ContentRequest`
@@ -15,15 +15,15 @@ pub type IntContentError = TokenPayload<ContentError, Token>;
     content = "payload",
     rename_all = "SCREAMING_SNAKE_CASE"
 )]
-pub enum ContentSuccess<'a> {
-    Category(#[serde(borrow)] CategoryPayload<'a>),
-    Categories(#[serde(borrow)] Vec<CategoryPayload<'a>>),
-    Thread(#[serde(borrow)] ThreadPayload<'a>),
-    Threads(#[serde(borrow)] Vec<ThreadPayload<'a>>),
-    Comment(#[serde(borrow)] CommentPayload<'a>),
-    Comments(#[serde(borrow)] Vec<CommentPayload<'a>>),
-    User(#[serde(borrow)] UserPayload<'a>),
-    Users(#[serde(borrow)] Vec<UserPayload<'a>>),
+pub enum ContentSuccess {
+    Category(CategoryPayload),
+    Categories(Vec<CategoryPayload>),
+    Thread(ThreadPayload),
+    Threads(Vec<ThreadPayload>),
+    Comment(CommentPayload),
+    Comments(Vec<CommentPayload>),
+    User(UserPayload),
+    Users(Vec<UserPayload>),
 }
 
 /// All the unsuccessful responses to a `ContentRequest`
@@ -49,37 +49,37 @@ pub enum ContentError {
 }
 
 #[derive(Getters, Serialize, Deserialize, Debug, PartialEq)]
-pub struct CategoryPayload<'a> {
+pub struct CategoryPayload {
     #[get]
     id: CategoryId,
-    #[serde(borrow)]
+
     #[get]
-    title: Title<'a>,
-    #[serde(borrow)]
+    title: Title,
+
     #[get]
-    description: Description<'a>,
+    description: Description,
 }
 
 #[derive(Getters, Serialize, Deserialize, Debug, PartialEq)]
-pub struct ThreadPayload<'a> {
+pub struct ThreadPayload {
     #[get]
     id: ThreadId,
     #[get]
     category_id: CategoryId,
     #[get]
     user_id: UserId,
-    #[serde(borrow)]
+
     #[get]
-    title: Title<'a>,
-    #[serde(borrow)]
+    title: Title,
+
     #[get]
-    description: Description<'a>,
+    description: Description,
     #[get]
     timestamp: i64, // TODO change to chrono type?
 }
 
 #[derive(Getters, Serialize, Deserialize, Debug, PartialEq)]
-pub struct CommentPayload<'a> {
+pub struct CommentPayload {
     #[get]
     id: CommentId,
     #[get]
@@ -88,27 +88,27 @@ pub struct CommentPayload<'a> {
     parent_id: Option<CommentId>,
     #[get]
     user_id: UserId,
-    #[serde(borrow)]
+
     #[get]
-    title: Title<'a>,
-    #[serde(borrow)]
+    title: Title,
+
     #[get]
-    description: Description<'a>,
+    description: Description,
     #[get]
     timestamp: i64, // TODO change to chrono type?
 }
 
 #[derive(Getters, Serialize, Deserialize, Debug, PartialEq)]
-pub struct UserPayload<'a> {
+pub struct UserPayload {
     #[get]
     id: CommentId,
-    #[serde(borrow)]
+
     #[get]
-    username: Username<'a>,
-    #[serde(borrow)]
+    username: Username,
+
     #[get]
-    description: Description<'a>,
-    #[serde(borrow)]
+    description: Description,
+
     #[get]
-    avatar: &'a str,
+    avatar: String,
 }

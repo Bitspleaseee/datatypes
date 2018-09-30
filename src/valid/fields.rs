@@ -2,8 +2,7 @@
 
 // TODO add tests which vertifies the `TryFrom` implementations
 
-use super::ValidationError::*;
-use serde::de::{self, Deserialize, Deserializer};
+use super::ValidationError;
 use std::convert::TryFrom;
 use std::fmt::{self, Display};
 
@@ -11,26 +10,26 @@ use super::{EMAIL_REGEX, PASSWORD_REGEX, USERNAME_REGEX};
 use regex::Regex;
 
 /// A valid (well formatted) username
-#[derive(Serialize, PartialEq, PartialOrd, Eq, Ord, Debug, Copy, Clone)]
-pub struct Username<'a>(&'a str);
+#[derive(Serialize, PartialEq, PartialOrd, Eq, Ord, Debug)]
+pub struct Username(String);
 
-impl_try_from! {
-    impl<'a> TryFrom<&'a str> for Username<'a> {
-        @USERNAME_REGEX => Username | InvalidUsername
+impl TryFrom<String> for Username {
+    type Error = ValidationError;
+    fn try_from(s: String) -> Result<Self, Self::Error> {
+        lazy_static! {
+            static ref RE: Regex = USERNAME_REGEX.parse().expect("invalid username regex");
+        }
+        if RE.is_match(&s) {
+            Ok(Username(s))
+        } else {
+            Err(ValidationError::InvalidUsername)
+        }
     }
 }
 
-impl<'de: 'a, 'a> Deserialize<'de> for Username<'a> {
-    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
-    where
-        D: Deserializer<'de>,
-    {
-        let s = <&'de str as Deserialize>::deserialize(deserializer)?;
-        Username::try_from(s).map_err(de::Error::custom)
-    }
-}
+impl_deserialize_with_try_from!(Username);
 
-impl<'a> Display for Username<'a> {
+impl Display for Username {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.0)
     }
@@ -40,50 +39,47 @@ impl<'a> Display for Username<'a> {
 ///
 /// NB This type does not implement `Debug` for the simple reason that a
 /// plaintext passwords should **never** be printed.
-#[derive(Serialize, PartialEq, PartialOrd, Eq, Ord, Copy, Clone)]
+#[derive(Serialize, PartialEq, PartialOrd, Eq, Ord)]
 #[serde(rename = "password")]
-pub struct PlainPassword<'a>(&'a str);
+pub struct PlainPassword(String);
 
-impl_try_from! {
-    impl<'a> TryFrom<&'a str> for PlainPassword<'a> {
-        @PASSWORD_REGEX => PlainPassword | InvalidPassword
+impl TryFrom<String> for PlainPassword {
+    type Error = ValidationError;
+    fn try_from(s: String) -> Result<Self, Self::Error> {
+        lazy_static! {
+            static ref RE: Regex = PASSWORD_REGEX.parse().expect("invalid password regex");
+        }
+        if RE.is_match(&s) {
+            Ok(PlainPassword(s))
+        } else {
+            Err(ValidationError::InvalidPassword)
+        }
     }
 }
 
-impl<'de: 'a, 'a> Deserialize<'de> for PlainPassword<'a> {
-    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
-    where
-        D: Deserializer<'de>,
-    {
-        let s = <&'de str as Deserialize>::deserialize(deserializer)?;
-        PlainPassword::try_from(s).map_err(de::Error::custom)
-    }
-}
+impl_deserialize_with_try_from!(PlainPassword);
 
 /// A valid (well formatted) title
 ///
 /// NB This type does **not** implement `Deserialize` because it should only be
 /// constructed through `try_into`.
-#[derive(Serialize, PartialEq, PartialOrd, Eq, Ord, Debug, Copy, Clone)]
-pub struct Title<'a>(&'a str);
+#[derive(Serialize, PartialEq, PartialOrd, Eq, Ord, Debug)]
+pub struct Title(String);
 
-impl_try_from! {
-    impl<'a> TryFrom<&'a str> for Title<'a> {
-        |s: &'a str| s.len() > 4 && s.len() < 80 => Title | InvalidTitle
+impl TryFrom<String> for Title {
+    type Error = ValidationError;
+    fn try_from(s: String) -> Result<Self, Self::Error> {
+        if 4 < s.len() && s.len() < 80 {
+            Ok(Title(s))
+        } else {
+            Err(ValidationError::InvalidTitle)
+        }
     }
 }
 
-impl<'de: 'a, 'a> Deserialize<'de> for Title<'a> {
-    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
-    where
-        D: Deserializer<'de>,
-    {
-        let s = <&'de str as Deserialize>::deserialize(deserializer)?;
-        Title::try_from(s).map_err(de::Error::custom)
-    }
-}
+impl_deserialize_with_try_from!(Title);
 
-impl<'a> Display for Title<'a> {
+impl Display for Title {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.0)
     }
@@ -93,25 +89,23 @@ impl<'a> Display for Title<'a> {
 ///
 /// NB This type does **not** implement `Deserialize` because it should only be
 /// constructed through `try_into`.
-#[derive(Serialize, PartialEq, PartialOrd, Eq, Ord, Debug, Copy, Clone)]
-pub struct Description<'a>(&'a str);
+#[derive(Serialize, PartialEq, PartialOrd, Eq, Ord, Debug)]
+pub struct Description(String);
 
-impl_try_from! {
-    impl<'a> TryFrom<&'a str> for Description<'a> {
-        |s: &'a str| s.len() > 4 && s.len() < 80 => Description | InvalidDescription
+impl TryFrom<String> for Description {
+    type Error = ValidationError;
+    fn try_from(s: String) -> Result<Self, Self::Error> {
+        if s.len() < 255 {
+            Ok(Description(s))
+        } else {
+            Err(ValidationError::InvalidDescription)
+        }
     }
 }
 
-impl<'de: 'a, 'a> Deserialize<'de> for Description<'a> {
-    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
-    where
-        D: Deserializer<'de>,
-    {
-        let s = <&'de str as Deserialize>::deserialize(deserializer)?;
-        Description::try_from(s).map_err(de::Error::custom)
-    }
-}
-impl<'a> Display for Description<'a> {
+impl_deserialize_with_try_from!(Description);
+
+impl Display for Description {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.0)
     }
@@ -121,26 +115,23 @@ impl<'a> Display for Description<'a> {
 ///
 /// NB This type does **not** implement `Deserialize` because it should only be
 /// constructed through `try_into`.
-#[derive(Serialize, PartialEq, PartialOrd, Eq, Ord, Debug, Copy, Clone)]
-pub struct CommentContent<'a>(&'a str);
+#[derive(Serialize, PartialEq, PartialOrd, Eq, Ord, Debug)]
+pub struct CommentContent(String);
 
-impl_try_from! {
-    impl<'a> TryFrom<&'a str> for CommentContent<'a> {
-        |s: &'a str| s.len() > 4 && s.len() < 80 => CommentContent | InvalidCommentContent
+impl TryFrom<String> for CommentContent {
+    type Error = ValidationError;
+    fn try_from(s: String) -> Result<Self, Self::Error> {
+        if s.len() > 4 && s.len() < 80 {
+            Ok(CommentContent(s))
+        } else {
+            Err(ValidationError::InvalidCommentContent)
+        }
     }
 }
 
-impl<'de: 'a, 'a> Deserialize<'de> for CommentContent<'a> {
-    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
-    where
-        D: Deserializer<'de>,
-    {
-        let s = <&'de str as Deserialize>::deserialize(deserializer)?;
-        CommentContent::try_from(s).map_err(de::Error::custom)
-    }
-}
+impl_deserialize_with_try_from!(CommentContent);
 
-impl<'a> Display for CommentContent<'a> {
+impl Display for CommentContent {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.0)
     }
@@ -150,26 +141,26 @@ impl<'a> Display for CommentContent<'a> {
 ///
 /// NB This type does **not** implement `Deserialize` because it should only be
 /// constructed through `try_into`.
-#[derive(Serialize, PartialEq, PartialOrd, Eq, Ord, Debug, Copy, Clone)]
-pub struct Email<'a>(&'a str);
+#[derive(Serialize, PartialEq, PartialOrd, Eq, Ord, Debug)]
+pub struct Email(String);
 
-impl_try_from! {
-    impl<'a> TryFrom<&'a str> for Email<'a> {
-        @EMAIL_REGEX => Email | InvalidEmail
+impl TryFrom<String> for Email {
+    type Error = ValidationError;
+    fn try_from(s: String) -> Result<Self, Self::Error> {
+        lazy_static! {
+            static ref RE: Regex = EMAIL_REGEX.parse().expect("invalid email regex");
+        }
+        if RE.is_match(&s) {
+            Ok(Email(s))
+        } else {
+            Err(ValidationError::InvalidEmail)
+        }
     }
 }
 
-impl<'de: 'a, 'a> Deserialize<'de> for Email<'a> {
-    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
-    where
-        D: Deserializer<'de>,
-    {
-        let s = <&'de str as Deserialize>::deserialize(deserializer)?;
-        Email::try_from(s).map_err(de::Error::custom)
-    }
-}
+impl_deserialize_with_try_from!(Email);
 
-impl<'a> Display for Email<'a> {
+impl Display for Email {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.0)
     }

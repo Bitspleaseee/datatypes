@@ -5,7 +5,7 @@ use crate::valid::fields::*;
 use crate::valid::ids::*;
 use crate::Token;
 
-pub type IntContentRequest<'a> = TokenPayload<ContentRequest<'a>, Token>;
+pub type IntContentRequest = TokenPayload<ContentRequest, Token>;
 
 #[derive(Serialize, Deserialize, Debug)]
 #[serde(
@@ -13,37 +13,35 @@ pub type IntContentRequest<'a> = TokenPayload<ContentRequest<'a>, Token>;
     content = "payload",
     rename_all = "SCREAMING_SNAKE_CASE"
 )]
-pub enum ContentRequest<'a> {
-    AddCategory(#[serde(borrow)] AddCategoryPayload<'a>),
-    EditCategory(#[serde(borrow)] EditCategoryPayload<'a>),
+pub enum ContentRequest {
+    AddCategory(AddCategoryPayload),
+    EditCategory(EditCategoryPayload),
     HideCategory(HideCategoryPayload),
-    AddThread(#[serde(borrow)] AddThreadPayload<'a>),
-    EditThread(#[serde(borrow)] EditThreadPayload<'a>),
+    AddThread(AddThreadPayload),
+    EditThread(EditThreadPayload),
     HideThread(HideThreadPayload),
-    AddComment(#[serde(borrow)] AddCommentPayload<'a>),
-    EditComment(#[serde(borrow)] EditCommentPayload<'a>),
+    AddComment(AddCommentPayload),
+    EditComment(EditCommentPayload),
     HideComment(HideCommentPayload),
-    UploadAvatar(#[serde(borrow)] UploadAvatarPayload<'a>),
+    UploadAvatar(UploadAvatarPayload),
 }
 
 #[derive(Getters, Serialize, Deserialize, PartialEq, Debug)]
-pub struct AddCategoryPayload<'a> {
-    #[serde(borrow)]
+pub struct AddCategoryPayload {
     #[get]
-    title: Title<'a>,
-    #[serde(borrow)]
+    title: Title,
+
     #[get]
-    description: Description<'a>,
+    description: Description,
 }
 
 #[derive(Getters, Serialize, Deserialize, PartialEq, Debug)]
-pub struct EditCategoryPayload<'a> {
-    #[serde(borrow)]
+pub struct EditCategoryPayload {
     #[get]
-    title: Option<Title<'a>>,
-    #[serde(borrow)]
+    title: Option<Title>,
+
     #[get]
-    description: Option<Description<'a>>,
+    description: Option<Description>,
 }
 
 #[derive(Getters, Serialize, Deserialize, PartialEq, Debug)]
@@ -53,29 +51,28 @@ pub struct HideCategoryPayload {
 }
 
 #[derive(Getters, Serialize, Deserialize, PartialEq, Debug)]
-pub struct AddThreadPayload<'a> {
+pub struct AddThreadPayload {
     #[get]
     category_id: CategoryId,
     #[get]
     user_id: UserId,
-    #[serde(borrow)]
+
     #[get]
-    title: Title<'a>,
-    #[serde(borrow)]
+    title: Title,
+
     #[get]
-    description: Description<'a>,
+    description: Description,
     #[get]
     timestamp: i64, // TODO change to chrono type?
 }
 
 #[derive(Getters, Serialize, Deserialize, PartialEq, Debug)]
-pub struct EditThreadPayload<'a> {
-    #[serde(borrow)]
+pub struct EditThreadPayload {
     #[get]
-    title: Option<Title<'a>>,
-    #[serde(borrow)]
+    title: Option<Title>,
+
     #[get]
-    description: Option<Description<'a>>,
+    description: Option<Description>,
 }
 
 #[derive(Getters, Serialize, Deserialize, PartialEq, Debug)]
@@ -85,25 +82,23 @@ pub struct HideThreadPayload {
 }
 
 #[derive(Getters, Serialize, Deserialize, PartialEq, Debug)]
-pub struct AddCommentPayload<'a> {
+pub struct AddCommentPayload {
     #[get]
     thread_id: ThreadId,
     #[get]
     user_id: UserId,
     #[get]
     parent_id: Option<CommentId>,
-    #[serde(borrow)]
     #[get]
-    content: CommentContent<'a>,
+    content: CommentContent,
     #[get]
     timestamp: i64, // TODO change to chrono type?
 }
 
 #[derive(Getters, Serialize, Deserialize, PartialEq, Debug)]
-pub struct EditCommentPayload<'a> {
-    #[serde(borrow)]
+pub struct EditCommentPayload {
     #[get]
-    content: CommentContent<'a>,
+    content: CommentContent,
 }
 
 #[derive(Getters, Serialize, Deserialize, PartialEq, Debug)]
@@ -113,8 +108,7 @@ pub struct HideCommentPayload {
 }
 
 #[derive(Getters, Serialize, Deserialize, PartialEq, Debug)]
-pub struct UploadAvatarPayload<'a> {
-    #[serde(borrow)]
+pub struct UploadAvatarPayload {
     #[get]
-    avatar: &'a str,
+    avatar: String,
 }

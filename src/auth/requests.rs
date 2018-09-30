@@ -5,7 +5,7 @@ use crate::payloads::TokenPayload;
 use crate::valid::fields::*;
 use crate::Token;
 
-pub type IntAuthRequest<'a> = TokenPayload<AuthRequest<'a>, Token>;
+pub type IntAuthRequest = TokenPayload<AuthRequest, Token>;
 
 #[derive(Serialize, Deserialize)]
 #[serde(
@@ -13,31 +13,29 @@ pub type IntAuthRequest<'a> = TokenPayload<AuthRequest<'a>, Token>;
     content = "payload",
     rename_all = "SCREAMING_SNAKE_CASE"
 )]
-pub enum AuthRequest<'a> {
-    Authenticate(#[serde(borrow)] AuthPayload<'a>),
+pub enum AuthRequest {
+    Authenticate(AuthPayload),
     Deauthenticate(EmptyPayload),
-    RegisterUser(#[serde(borrow)] RegisterUserPayload<'a>),
+    RegisterUser(RegisterUserPayload),
 }
 
 #[derive(Getters, Serialize, Deserialize)]
-pub struct AuthPayload<'a> {
-    #[serde(borrow)]
+pub struct AuthPayload {
     #[get]
-    username: Username<'a>,
-    #[serde(borrow)]
+    username: Username,
+
     #[get]
-    password: PlainPassword<'a>,
+    password: PlainPassword,
 }
 
 #[derive(Getters, Serialize, Deserialize)]
-pub struct RegisterUserPayload<'a> {
-    #[serde(borrow)]
+pub struct RegisterUserPayload {
     #[get]
-    username: Username<'a>,
-    #[serde(borrow)]
+    username: Username,
+
     #[get]
-    password: PlainPassword<'a>,
-    #[serde(borrow)]
+    password: PlainPassword,
+
     #[get]
-    email: Email<'a>,
+    email: Email,
 }
