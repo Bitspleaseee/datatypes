@@ -17,6 +17,7 @@ pub type Token = u32;
 
 #[macro_use]
 pub mod macros;
+pub mod admin;
 pub mod auth;
 pub mod content;
 pub mod error;
