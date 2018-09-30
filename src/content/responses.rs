@@ -24,6 +24,7 @@ pub enum ContentSuccess {
     Comments(Vec<CommentPayload>),
     User(UserPayload),
     Users(Vec<UserPayload>),
+    SearchResult(SearchResultsPayload),
 }
 
 /// All the unsuccessful responses to a `ContentRequest`
@@ -38,24 +39,16 @@ pub enum ContentError {
     MissingContent,
     #[fail(display = "passed invalid id")]
     InvalidId,
-    #[fail(display = "token missing from cookies")]
-    MissingToken,
-    #[fail(display = "passed invalid token")]
-    InvalidToken,
-    #[fail(display = "passed invalid query")]
+    #[fail(display = "invalid query string")]
     InvalidQuery,
-    #[fail(display = "internal server error")]
-    ServerError,
 }
 
 #[derive(Getters, Serialize, Deserialize, Debug, PartialEq)]
 pub struct CategoryPayload {
     #[get]
     id: CategoryId,
-
     #[get]
     title: Title,
-
     #[get]
     description: Description,
 }
@@ -68,10 +61,8 @@ pub struct ThreadPayload {
     category_id: CategoryId,
     #[get]
     user_id: UserId,
-
     #[get]
     title: Title,
-
     #[get]
     description: Description,
     #[get]
@@ -88,10 +79,8 @@ pub struct CommentPayload {
     parent_id: Option<CommentId>,
     #[get]
     user_id: UserId,
-
     #[get]
     title: Title,
-
     #[get]
     description: Description,
     #[get]
@@ -102,13 +91,19 @@ pub struct CommentPayload {
 pub struct UserPayload {
     #[get]
     id: CommentId,
-
     #[get]
     username: Username,
-
     #[get]
     description: Description,
-
     #[get]
     avatar: String,
+}
+
+/// A search result which contains all the elements that matched the search
+#[derive(Serialize, Deserialize, PartialEq, Debug)]
+pub struct SearchResultsPayload {
+    categories: Vec<CategoryPayload>,
+    threads: Vec<ThreadPayload>,
+    comments: Vec<CommentPayload>,
+    users: Vec<UserPayload>,
 }

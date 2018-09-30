@@ -1,4 +1,4 @@
-//! Content requests to and responses from the web-client
+//! Content requests from and responses to the web-client
 
 pub mod requests;
 pub mod responses;

@@ -23,7 +23,6 @@ pub enum AuthRequest {
 pub struct AuthPayload {
     #[get]
     username: Username,
-
     #[get]
     password: PlainPassword,
 }
@@ -32,10 +31,8 @@ pub struct AuthPayload {
 pub struct RegisterUserPayload {
     #[get]
     username: Username,
-
     #[get]
     password: PlainPassword,
-
     #[get]
     email: Email,
 }

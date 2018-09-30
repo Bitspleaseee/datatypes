@@ -24,10 +24,6 @@ pub enum AdminSuccess {
     rename_all = "SCREAMING_SNAKE_CASE"
 )]
 pub enum AdminError {
-    #[fail(display = "client (cookies) does not have token")]
-    MissingTokenClient,
-    #[fail(display = "server does not have the requested token registered")]
-    UnassociatedToken,
     #[fail(display = "internal occured error")]
     InternalError,
 }

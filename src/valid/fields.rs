@@ -6,7 +6,7 @@ use super::ValidationError;
 use std::convert::TryFrom;
 use std::fmt::{self, Display};
 
-use super::{EMAIL_REGEX, PASSWORD_REGEX, USERNAME_REGEX};
+use super::{EMAIL_REGEX, PASSWORD_REGEX, SEARCH_QUERY_REGEX, USERNAME_REGEX};
 use regex::Regex;
 
 /// A valid (well formatted) username
@@ -60,9 +60,6 @@ impl TryFrom<String> for PlainPassword {
 impl_deserialize_with_try_from!(PlainPassword);
 
 /// A valid (well formatted) title
-///
-/// NB This type does **not** implement `Deserialize` because it should only be
-/// constructed through `try_into`.
 #[derive(Serialize, PartialEq, PartialOrd, Eq, Ord, Debug)]
 pub struct Title(String);
 
@@ -86,9 +83,6 @@ impl Display for Title {
 }
 
 /// A valid (well formatted) description
-///
-/// NB This type does **not** implement `Deserialize` because it should only be
-/// constructed through `try_into`.
 #[derive(Serialize, PartialEq, PartialOrd, Eq, Ord, Debug)]
 pub struct Description(String);
 
@@ -112,9 +106,6 @@ impl Display for Description {
 }
 
 /// A valid (well formatted) comment-content
-///
-/// NB This type does **not** implement `Deserialize` because it should only be
-/// constructed through `try_into`.
 #[derive(Serialize, PartialEq, PartialOrd, Eq, Ord, Debug)]
 pub struct CommentContent(String);
 
@@ -138,9 +129,6 @@ impl Display for CommentContent {
 }
 
 /// A valid (well formatted) email
-///
-/// NB This type does **not** implement `Deserialize` because it should only be
-/// constructed through `try_into`.
 #[derive(Serialize, PartialEq, PartialOrd, Eq, Ord, Debug)]
 pub struct Email(String);
 
@@ -161,6 +149,32 @@ impl TryFrom<String> for Email {
 impl_deserialize_with_try_from!(Email);
 
 impl Display for Email {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.0)
+    }
+}
+
+/// A valid (well formatted) search query string
+#[derive(Serialize, PartialEq, PartialOrd, Eq, Ord, Debug)]
+pub struct QueryStr(String);
+
+impl TryFrom<String> for QueryStr {
+    type Error = ValidationError;
+    fn try_from(s: String) -> Result<Self, Self::Error> {
+        lazy_static! {
+            static ref RE: Regex = SEARCH_QUERY_REGEX.parse().expect("invalid email regex");
+        }
+        if RE.is_match(&s) {
+            Ok(QueryStr(s))
+        } else {
+            Err(ValidationError::InvalidQuery)
+        }
+    }
+}
+
+impl_deserialize_with_try_from!(QueryStr);
+
+impl Display for QueryStr {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.0)
     }

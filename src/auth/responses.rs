@@ -27,12 +27,10 @@ pub enum AuthSuccess {
     rename_all = "SCREAMING_SNAKE_CASE"
 )]
 pub enum AuthError {
-    #[fail(display = "client (cookies) does not have token")]
-    MissingTokenClient,
-    #[fail(display = "server does not have provided token")]
-    MissingTokenServer,
     #[fail(display = "invalid username")]
     InvalidUsername,
     #[fail(display = "invalid password")]
     InvalidPassword,
+    #[fail(display = "user already exists")]
+    CannotRegisterExistingUser,
 }

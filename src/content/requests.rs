@@ -24,13 +24,13 @@ pub enum ContentRequest {
     EditComment(EditCommentPayload),
     HideComment(HideCommentPayload),
     UploadAvatar(UploadAvatarPayload),
+    Search(SearchPayload),
 }
 
 #[derive(Getters, Serialize, Deserialize, PartialEq, Debug)]
 pub struct AddCategoryPayload {
     #[get]
     title: Title,
-
     #[get]
     description: Description,
 }
@@ -39,7 +39,6 @@ pub struct AddCategoryPayload {
 pub struct EditCategoryPayload {
     #[get]
     title: Option<Title>,
-
     #[get]
     description: Option<Description>,
 }
@@ -56,10 +55,8 @@ pub struct AddThreadPayload {
     category_id: CategoryId,
     #[get]
     user_id: UserId,
-
     #[get]
     title: Title,
-
     #[get]
     description: Description,
     #[get]
@@ -70,7 +67,6 @@ pub struct AddThreadPayload {
 pub struct EditThreadPayload {
     #[get]
     title: Option<Title>,
-
     #[get]
     description: Option<Description>,
 }
@@ -111,4 +107,10 @@ pub struct HideCommentPayload {
 pub struct UploadAvatarPayload {
     #[get]
     avatar: String,
+}
+
+#[derive(Getters, Serialize, Deserialize, PartialEq, Debug)]
+pub struct SearchPayload {
+    #[get]
+    query: QueryStr,
 }
