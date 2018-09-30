@@ -62,6 +62,13 @@ macro_rules! id_impls {
                     .map_err(|_| ValidationError::InvalidId)
             }
         }
+        impl<'a> FromParam<'a> for $ty {
+            type Error = ValidationError;
+            fn from_param(s: &'a RawStr) -> Result<Self, Self::Error> {
+                let s: &'a str = s.as_ref();
+                s.try_into()
+            }
+        }
         impl From<$inner> for $ty {
             fn from(n: $inner) -> Self {
                 $exp(n)

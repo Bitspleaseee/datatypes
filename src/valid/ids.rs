@@ -1,10 +1,13 @@
 //! Database IDs (a direct referece to a database item)
 
 use super::ValidationError;
-use std::convert::TryFrom;
+use std::convert::{TryFrom, TryInto};
 use std::hash::Hash;
 use std::str::FromStr;
 use std::ops::Deref;
+use std::fmt::Debug;
+use rocket::request::FromParam;
+use rocket::http::RawStr;
 
 /// Any value which is used as an ID should implement this trait
 ///
@@ -47,14 +50,27 @@ id_impls!(UserId, UserId, u32);
 /// and `FromParam` for `OptId` which takes into account if the value is empty.
 pub struct OptId<I: Id>(Option<I>);
 
-impl<'a, I: Id + FromStr> TryFrom<&'a str> for OptId<I> {
-    type Error = <I as FromStr>::Err;
+impl<'a, I> TryFrom<&'a str> for OptId<I>
+    where I: Id + TryFrom<&'a str> {
+    type Error = <I as TryFrom<&'a str>>::Error;
 
     fn try_from(s: &'a str) -> Result<Self, Self::Error> {
         if s.is_empty() {
             return Ok(OptId(None));
         }
-        s.parse().map(|id| OptId(Some(id)))
+        s.try_into().map(|id| OptId(Some(id)))
+    }
+}
+
+impl<'a, I> FromParam<'a> for OptId<I>
+    where
+        I: Id + TryFrom<&'a str>,
+        I::Error: Debug {
+    type Error = <I as TryFrom<&'a str>>::Error;
+
+    fn from_param(param: &'a RawStr) -> Result<Self, Self::Error> {
+        let s: &'a str = param.as_ref();
+        s.try_into()
     }
 }
 
