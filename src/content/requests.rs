@@ -28,17 +28,21 @@ pub enum ContentRequest<'a> {
 
 #[derive(Getters, Serialize, Deserialize, PartialEq, Debug)]
 pub struct AddCategoryPayload<'a> {
-    #[serde(borrow)] #[get]
+    #[serde(borrow)]
+    #[get]
     title: Title<'a>,
-    #[serde(borrow)] #[get]
+    #[serde(borrow)]
+    #[get]
     description: Description<'a>,
 }
 
 #[derive(Getters, Serialize, Deserialize, PartialEq, Debug)]
 pub struct EditCategoryPayload<'a> {
-    #[serde(borrow)] #[get]
+    #[serde(borrow)]
+    #[get]
     title: Option<Title<'a>>,
-    #[serde(borrow)] #[get]
+    #[serde(borrow)]
+    #[get]
     description: Option<Description<'a>>,
 }
 
@@ -54,9 +58,11 @@ pub struct AddThreadPayload<'a> {
     category_id: CategoryId,
     #[get]
     user_id: UserId,
-    #[serde(borrow)] #[get]
+    #[serde(borrow)]
+    #[get]
     title: Title<'a>,
-    #[serde(borrow)] #[get]
+    #[serde(borrow)]
+    #[get]
     description: Description<'a>,
     #[get]
     timestamp: i64, // TODO change to chrono type?
@@ -64,9 +70,11 @@ pub struct AddThreadPayload<'a> {
 
 #[derive(Getters, Serialize, Deserialize, PartialEq, Debug)]
 pub struct EditThreadPayload<'a> {
-    #[serde(borrow)] #[get]
+    #[serde(borrow)]
+    #[get]
     title: Option<Title<'a>>,
-    #[serde(borrow)] #[get]
+    #[serde(borrow)]
+    #[get]
     description: Option<Description<'a>>,
 }
 
@@ -84,7 +92,8 @@ pub struct AddCommentPayload<'a> {
     user_id: UserId,
     #[get]
     parent_id: Option<CommentId>,
-    #[serde(borrow)] #[get]
+    #[serde(borrow)]
+    #[get]
     content: CommentContent<'a>,
     #[get]
     timestamp: i64, // TODO change to chrono type?
@@ -92,7 +101,8 @@ pub struct AddCommentPayload<'a> {
 
 #[derive(Getters, Serialize, Deserialize, PartialEq, Debug)]
 pub struct EditCommentPayload<'a> {
-    #[serde(borrow)] #[get]
+    #[serde(borrow)]
+    #[get]
     content: CommentContent<'a>,
 }
 
@@ -104,6 +114,7 @@ pub struct HideCommentPayload {
 
 #[derive(Getters, Serialize, Deserialize, PartialEq, Debug)]
 pub struct UploadAvatarPayload<'a> {
-    #[serde(borrow)] #[get]
+    #[serde(borrow)]
+    #[get]
     avatar: &'a str,
 }

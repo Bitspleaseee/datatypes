@@ -52,9 +52,11 @@ pub enum ContentError {
 pub struct CategoryPayload<'a> {
     #[get]
     id: CategoryId,
-    #[serde(borrow)] #[get]
+    #[serde(borrow)]
+    #[get]
     title: Title<'a>,
-    #[serde(borrow)] #[get]
+    #[serde(borrow)]
+    #[get]
     description: Description<'a>,
 }
 
@@ -66,9 +68,11 @@ pub struct ThreadPayload<'a> {
     category_id: CategoryId,
     #[get]
     user_id: UserId,
-    #[serde(borrow)] #[get]
+    #[serde(borrow)]
+    #[get]
     title: Title<'a>,
-    #[serde(borrow)] #[get]
+    #[serde(borrow)]
+    #[get]
     description: Description<'a>,
     #[get]
     timestamp: i64, // TODO change to chrono type?
@@ -84,9 +88,11 @@ pub struct CommentPayload<'a> {
     parent_id: Option<CommentId>,
     #[get]
     user_id: UserId,
-    #[serde(borrow)] #[get]
+    #[serde(borrow)]
+    #[get]
     title: Title<'a>,
-    #[serde(borrow)] #[get]
+    #[serde(borrow)]
+    #[get]
     description: Description<'a>,
     #[get]
     timestamp: i64, // TODO change to chrono type?
@@ -96,10 +102,13 @@ pub struct CommentPayload<'a> {
 pub struct UserPayload<'a> {
     #[get]
     id: CommentId,
-    #[serde(borrow)] #[get]
+    #[serde(borrow)]
+    #[get]
     username: Username<'a>,
-    #[serde(borrow)] #[get]
+    #[serde(borrow)]
+    #[get]
     description: Description<'a>,
-    #[serde(borrow)] #[get]
+    #[serde(borrow)]
+    #[get]
     avatar: &'a str,
 }

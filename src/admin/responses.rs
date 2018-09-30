@@ -14,7 +14,7 @@ pub type IntAdminError = TokenPayload<AdminError, Token>;
 )]
 pub enum AdminSuccess {
     IpBanned,
-    IpUnbanned
+    IpUnbanned,
 }
 
 #[derive(Fail, Serialize, Deserialize, PartialEq, Clone, Copy, Debug)]
@@ -26,6 +26,8 @@ pub enum AdminSuccess {
 pub enum AdminError {
     #[fail(display = "client (cookies) does not have token")]
     MissingTokenClient,
-    #[fail(display = "server does not have provided token")]
-    MissingTokenServer,
+    #[fail(display = "server does not have the requested token registered")]
+    UnassociatedToken,
+    #[fail(display = "internal occured error")]
+    InternalError,
 }

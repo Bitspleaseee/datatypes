@@ -1,13 +1,12 @@
 //! Database IDs (a direct referece to a database item)
 
 use super::ValidationError;
-use std::convert::{TryFrom, TryInto};
-use std::hash::Hash;
-use std::str::FromStr;
-use std::ops::Deref;
-use std::fmt::Debug;
-use rocket::request::FromParam;
 use rocket::http::RawStr;
+use rocket::request::FromParam;
+use std::convert::{TryFrom, TryInto};
+use std::fmt::Debug;
+use std::hash::Hash;
+use std::ops::Deref;
 
 /// Any value which is used as an ID should implement this trait
 ///
@@ -51,7 +50,9 @@ id_impls!(UserId, UserId, u32);
 pub struct OptId<I: Id>(Option<I>);
 
 impl<'a, I> TryFrom<&'a str> for OptId<I>
-    where I: Id + TryFrom<&'a str> {
+where
+    I: Id + TryFrom<&'a str>,
+{
     type Error = <I as TryFrom<&'a str>>::Error;
 
     fn try_from(s: &'a str) -> Result<Self, Self::Error> {
@@ -63,9 +64,10 @@ impl<'a, I> TryFrom<&'a str> for OptId<I>
 }
 
 impl<'a, I> FromParam<'a> for OptId<I>
-    where
-        I: Id + TryFrom<&'a str>,
-        I::Error: Debug {
+where
+    I: Id + TryFrom<&'a str>,
+    I::Error: Debug,
+{
     type Error = <I as TryFrom<&'a str>>::Error;
 
     fn from_param(param: &'a RawStr) -> Result<Self, Self::Error> {

@@ -14,25 +14,30 @@ pub type IntAuthRequest<'a> = TokenPayload<AuthRequest<'a>, Token>;
     rename_all = "SCREAMING_SNAKE_CASE"
 )]
 pub enum AuthRequest<'a> {
-    Authenticate(#[serde(borrow)] AuthRequestPayload<'a>),
+    Authenticate(#[serde(borrow)] AuthPayload<'a>),
     Deauthenticate(EmptyPayload),
     RegisterUser(#[serde(borrow)] RegisterUserPayload<'a>),
 }
 
 #[derive(Getters, Serialize, Deserialize)]
-pub struct AuthRequestPayload<'a> {
-    #[serde(borrow)] #[get]
+pub struct AuthPayload<'a> {
+    #[serde(borrow)]
+    #[get]
     username: Username<'a>,
-    #[serde(borrow)] #[get]
+    #[serde(borrow)]
+    #[get]
     password: PlainPassword<'a>,
 }
 
 #[derive(Getters, Serialize, Deserialize)]
 pub struct RegisterUserPayload<'a> {
-    #[serde(borrow)] #[get]
+    #[serde(borrow)]
+    #[get]
     username: Username<'a>,
-    #[serde(borrow)] #[get]
+    #[serde(borrow)]
+    #[get]
     password: PlainPassword<'a>,
-    #[serde(borrow)] #[get]
+    #[serde(borrow)]
+    #[get]
     email: Email<'a>,
 }
