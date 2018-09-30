@@ -10,7 +10,7 @@ use crate::content::responses::ContentError;
     content = "payload",
     rename_all = "SCREAMING_SNAKE_CASE"
 )]
-pub enum Error {
+pub enum ResponseError {
     #[fail(display = "error specific to auth requests")]
     AuthRequestError(#[cause] AuthError),
     #[fail(display = "error specific to content requests")]
@@ -23,20 +23,20 @@ pub enum Error {
     Unauthorized,
 }
 
-impl From<AuthError> for Error {
+impl From<AuthError> for ResponseError {
     fn from(e: AuthError) -> Self {
-        Error::AuthRequestError(e)
+        ResponseError::AuthRequestError(e)
     }
 }
 
-impl From<ContentError> for Error {
+impl From<ContentError> for ResponseError {
     fn from(e: ContentError) -> Self {
-        Error::ContentRequestError(e)
+        ResponseError::ContentRequestError(e)
     }
 }
 
-impl From<AdminError> for Error {
+impl From<AdminError> for ResponseError {
     fn from(e: AdminError) -> Self {
-        Error::AdminRequestError(e)
+        ResponseError::AdminRequestError(e)
     }
 }
