@@ -11,9 +11,6 @@ use super::{EMAIL_REGEX, PASSWORD_REGEX, USERNAME_REGEX};
 use regex::Regex;
 
 /// A valid (well formatted) username
-///
-/// NB This type does **not** implement `Deserialize` because it should only be
-/// constructed through `try_into`
 #[derive(Serialize, PartialEq, PartialOrd, Eq, Ord, Debug, Copy, Clone)]
 pub struct Username<'a>(&'a str);
 
@@ -40,9 +37,6 @@ impl<'a> Display for Username<'a> {
 }
 
 /// A valid (well formatted) plaintext password
-///
-/// NB This type does **not** implement `Deserialize` because it should only be
-/// constructed through `try_into`.
 ///
 /// NB This type does not implement `Debug` for the simple reason that a
 /// plaintext passwords should **never** be printed.

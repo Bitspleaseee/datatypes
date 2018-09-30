@@ -5,8 +5,8 @@ use crate::valid::fields::*;
 use crate::valid::ids::*;
 use crate::Token;
 
-pub type IntContentRequestSuccess<'a> = TokenPayload<ContentRequestSuccess<'a>, Token>;
-pub type IntContentRequestError = TokenPayload<ContentError, Token>;
+pub type IntContentSuccess<'a> = TokenPayload<ContentSuccess<'a>, Token>;
+pub type IntContentError = TokenPayload<ContentError, Token>;
 
 /// All the successful responses to a `ContentRequest`
 #[derive(Serialize, Deserialize, Debug)]
@@ -15,7 +15,7 @@ pub type IntContentRequestError = TokenPayload<ContentError, Token>;
     content = "payload",
     rename_all = "SCREAMING_SNAKE_CASE"
 )]
-pub enum ContentRequestSuccess<'a> {
+pub enum ContentSuccess<'a> {
     Category(#[serde(borrow)] CategoryPayload<'a>),
     Categories(#[serde(borrow)] Vec<CategoryPayload<'a>>),
     Thread(#[serde(borrow)] ThreadPayload<'a>),
