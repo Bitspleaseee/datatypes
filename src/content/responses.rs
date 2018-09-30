@@ -45,57 +45,57 @@ pub enum ContentError {
 
 #[derive(Getters, Serialize, Deserialize, Debug, PartialEq)]
 pub struct CategoryPayload {
-    #[get]
+    #[get = "pub"]
     id: CategoryId,
-    #[get]
+    #[get = "pub"]
     title: Title,
-    #[get]
+    #[get = "pub"]
     description: Description,
 }
 
 #[derive(Getters, Serialize, Deserialize, Debug, PartialEq)]
 pub struct ThreadPayload {
-    #[get]
+    #[get = "pub"]
     id: ThreadId,
-    #[get]
+    #[get = "pub"]
     category_id: CategoryId,
-    #[get]
+    #[get = "pub"]
     user_id: UserId,
-    #[get]
+    #[get = "pub"]
     title: Title,
-    #[get]
+    #[get = "pub"]
     description: Description,
-    #[get]
+    #[get = "pub"]
     timestamp: i64, // TODO change to chrono type?
 }
 
 #[derive(Getters, Serialize, Deserialize, Debug, PartialEq)]
 pub struct CommentPayload {
-    #[get]
+    #[get = "pub"]
     id: CommentId,
-    #[get]
+    #[get = "pub"]
     thread_id: ThreadId,
-    #[get]
+    #[get = "pub"]
     parent_id: Option<CommentId>,
-    #[get]
+    #[get = "pub"]
     user_id: UserId,
-    #[get]
+    #[get = "pub"]
     title: Title,
-    #[get]
+    #[get = "pub"]
     description: Description,
-    #[get]
+    #[get = "pub"]
     timestamp: i64, // TODO change to chrono type?
 }
 
 #[derive(Getters, Serialize, Deserialize, Debug, PartialEq)]
 pub struct UserPayload {
-    #[get]
+    #[get = "pub"]
     id: CommentId,
-    #[get]
+    #[get = "pub"]
     username: Username,
-    #[get]
+    #[get = "pub"]
     description: Description,
-    #[get]
+    #[get = "pub"]
     avatar: String,
 }
 

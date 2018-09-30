@@ -21,18 +21,18 @@ pub enum AuthRequest {
 
 #[derive(Getters, Serialize, Deserialize)]
 pub struct AuthPayload {
-    #[get]
+    #[get = "pub"]
     username: Username,
-    #[get]
+    #[get = "pub"]
     password: PlainPassword,
 }
 
 #[derive(Getters, Serialize, Deserialize)]
 pub struct RegisterUserPayload {
-    #[get]
+    #[get = "pub"]
     username: Username,
-    #[get]
+    #[get = "pub"]
     password: PlainPassword,
-    #[get]
+    #[get = "pub"]
     email: Email,
 }

@@ -21,6 +21,8 @@ pub enum ResponseError {
     Unauthenticated,
     #[fail(display = "user is not authorized to perform action")]
     Unauthorized,
+    #[fail(display = "internal server error occured")]
+    InternalServerError,
 }
 
 impl From<AuthError> for ResponseError {

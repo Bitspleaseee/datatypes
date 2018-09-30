@@ -19,6 +19,6 @@ pub enum AdminRequest {
 
 #[derive(Getters, Serialize, Deserialize, Debug)]
 pub struct IpAddrPayload {
-    #[get]
+    #[get = "pub"]
     ip: IpAddr,
 }
