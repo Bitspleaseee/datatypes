@@ -1,5 +1,6 @@
 use crate::auth::responses::AuthError;
-use crate::content::responses::ContentRequestError;
+use crate::admin::responses::AdminError;
+use crate::content::responses::ContentError;
 
 #[derive(Fail, Serialize, Deserialize, PartialEq, Clone, Copy, Debug)]
 #[serde(
@@ -11,7 +12,9 @@ pub enum ResponseError {
     #[fail(display = "authentication request error")]
     AuthenticationError(AuthError),
     #[fail(display = "content request error")]
-    ContentRequestError(ContentRequestError),
+    ContentRequestError(ContentError),
+    #[fail(display = "admin request error")]
+    AdminRequestError(AdminError),
 }
 
 impl From<AuthError> for ResponseError {
@@ -20,8 +23,15 @@ impl From<AuthError> for ResponseError {
     }
 }
 
-impl From<ContentRequestError> for ResponseError {
-    fn from(e: ContentRequestError) -> Self {
+impl From<ContentError> for ResponseError {
+    fn from(e: ContentError) -> Self {
         ResponseError::ContentRequestError(e)
     }
 }
+
+impl From<AdminError> for ResponseError {
+    fn from(e: AdminError) -> Self {
+        ResponseError::AdminRequestError(e)
+    }
+}
+

@@ -6,7 +6,7 @@ use crate::valid::ids::*;
 use crate::Token;
 
 pub type IntContentRequestSuccess<'a> = TokenPayload<ContentRequestSuccess<'a>, Token>;
-pub type IntContentRequestError = TokenPayload<ContentRequestError, Token>;
+pub type IntContentRequestError = TokenPayload<ContentError, Token>;
 
 /// All the successful responses to a `ContentRequest`
 #[derive(Serialize, Deserialize, Debug)]
@@ -33,7 +33,7 @@ pub enum ContentRequestSuccess<'a> {
     content = "payload",
     rename_all = "SCREAMING_SNAKE_CASE"
 )]
-pub enum ContentRequestError {
+pub enum ContentError {
     #[fail(display = "content is missing or hidden")]
     MissingContent,
     #[fail(display = "passed invalid id")]
@@ -48,47 +48,58 @@ pub enum ContentRequestError {
     ServerError,
 }
 
-#[derive(Serialize, Deserialize, Debug, PartialEq)]
+#[derive(Getters, Serialize, Deserialize, Debug, PartialEq)]
 pub struct CategoryPayload<'a> {
+    #[get]
     id: CategoryId,
-    #[serde(borrow)]
+    #[serde(borrow)] #[get]
     title: Title<'a>,
-    #[serde(borrow)]
+    #[serde(borrow)] #[get]
     description: Description<'a>,
 }
 
-#[derive(Serialize, Deserialize, Debug, PartialEq)]
+#[derive(Getters, Serialize, Deserialize, Debug, PartialEq)]
 pub struct ThreadPayload<'a> {
+    #[get]
     id: ThreadId,
+    #[get]
     category_id: CategoryId,
+    #[get]
     user_id: UserId,
-    #[serde(borrow)]
+    #[serde(borrow)] #[get]
     title: Title<'a>,
-    #[serde(borrow)]
+    #[serde(borrow)] #[get]
     description: Description<'a>,
+    #[get]
     timestamp: i64, // TODO change to chrono type?
 }
 
-#[derive(Serialize, Deserialize, Debug, PartialEq)]
+#[derive(Getters, Serialize, Deserialize, Debug, PartialEq)]
 pub struct CommentPayload<'a> {
+    #[get]
     id: CommentId,
+    #[get]
     thread_id: ThreadId,
+    #[get]
     parent_id: Option<CommentId>,
+    #[get]
     user_id: UserId,
-    #[serde(borrow)]
+    #[serde(borrow)] #[get]
     title: Title<'a>,
-    #[serde(borrow)]
+    #[serde(borrow)] #[get]
     description: Description<'a>,
+    #[get]
     timestamp: i64, // TODO change to chrono type?
 }
 
-#[derive(Serialize, Deserialize, Debug, PartialEq)]
+#[derive(Getters, Serialize, Deserialize, Debug, PartialEq)]
 pub struct UserPayload<'a> {
+    #[get]
     id: CommentId,
-    #[serde(borrow)]
+    #[serde(borrow)] #[get]
     username: Username<'a>,
-    #[serde(borrow)]
+    #[serde(borrow)] #[get]
     description: Description<'a>,
-    #[serde(borrow)]
+    #[serde(borrow)] #[get]
     avatar: &'a str,
 }

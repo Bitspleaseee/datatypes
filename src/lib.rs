@@ -12,7 +12,10 @@ extern crate failure_derive;
 extern crate lazy_static;
 extern crate chrono;
 extern crate regex;
+#[macro_use]
+extern crate getset;
 
+// TODO should probably be changed to something else
 pub type Token = u32;
 
 #[macro_use]

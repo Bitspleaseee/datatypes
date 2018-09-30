@@ -19,20 +19,20 @@ pub enum AuthRequest<'a> {
     RegisterUser(#[serde(borrow)] RegisterUserPayload<'a>),
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Getters, Serialize, Deserialize)]
 pub struct AuthRequestPayload<'a> {
-    #[serde(borrow)]
+    #[serde(borrow)] #[get]
     username: Username<'a>,
-    #[serde(borrow)]
+    #[serde(borrow)] #[get]
     password: PlainPassword<'a>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Getters, Serialize, Deserialize)]
 pub struct RegisterUserPayload<'a> {
-    #[serde(borrow)]
+    #[serde(borrow)] #[get]
     username: Username<'a>,
-    #[serde(borrow)]
+    #[serde(borrow)] #[get]
     password: PlainPassword<'a>,
-    #[serde(borrow)]
+    #[serde(borrow)] #[get]
     email: Email<'a>,
 }

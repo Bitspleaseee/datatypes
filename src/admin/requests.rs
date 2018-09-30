@@ -18,7 +18,8 @@ pub enum AdminRequests {
     UnbanIp(BanUserPayload),
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Getters, Serialize, Deserialize, Debug)]
 pub struct BanUserPayload {
+    #[get]
     ip: IpAddr,
 }
