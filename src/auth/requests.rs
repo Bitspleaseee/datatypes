@@ -51,5 +51,5 @@ pub struct RegisterUserPayload<'a> {
 
 #[derive(Serialize, Deserialize)]
 pub struct BanUserPayload {
-    ip: IpAddr,
+    pub ip: IpAddr,
 }
