@@ -3,6 +3,8 @@
 use super::ValidationError;
 use std::convert::TryFrom;
 use std::hash::Hash;
+use std::str::FromStr;
+use std::ops::Deref;
 
 /// Any value which is used as an ID should implement this trait
 ///
@@ -38,3 +40,28 @@ id_impls!(CommentId, CommentId, u32);
 #[serde(transparent)]
 pub struct UserId(u32);
 id_impls!(UserId, UserId, u32);
+
+/// Optional wrapper for any type which implements Id
+///
+/// The reason for this wrapper is to be able to implement a custom `TryFrom`
+/// and `FromParam` for `OptId` which takes into account if the value is empty.
+pub struct OptId<I: Id>(Option<I>);
+
+impl<'a, I: Id + FromStr> TryFrom<&'a str> for OptId<I> {
+    type Error = <I as FromStr>::Err;
+
+    fn try_from(s: &'a str) -> Result<Self, Self::Error> {
+        if s.is_empty() {
+            return Ok(OptId(None));
+        }
+        s.parse().map(|id| OptId(Some(id)))
+    }
+}
+
+impl<I: Id> Deref for OptId<I> {
+    type Target = Option<I>;
+
+    fn deref(&self) -> &Self::Target {
+        &self.0
+    }
+}
