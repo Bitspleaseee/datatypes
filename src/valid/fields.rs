@@ -12,7 +12,7 @@ use super::{EMAIL_REGEX, PASSWORD_REGEX, SEARCH_QUERY_REGEX, USERNAME_REGEX};
 use regex::Regex;
 
 /// A valid (well formatted) username
-#[derive(Serialize, PartialEq, PartialOrd, Eq, Ord, Debug)]
+#[derive(Serialize, PartialEq, PartialOrd, Eq, Ord, Debug, Clone)]
 pub struct Username(String);
 
 impl TryFrom<String> for Username {
@@ -41,7 +41,7 @@ impl Display for Username {
 ///
 /// NB This type does not implement `Debug` for the simple reason that a
 /// plaintext passwords should **never** be printed.
-#[derive(Serialize, PartialEq, PartialOrd, Eq, Ord)]
+#[derive(Serialize, PartialEq, PartialOrd, Eq, Ord, Clone)]
 #[serde(rename = "password")]
 pub struct PlainPassword(String);
 
@@ -62,7 +62,7 @@ impl TryFrom<String> for PlainPassword {
 impl_deserialize_with_try_from!(PlainPassword);
 
 /// A valid (well formatted) title
-#[derive(Serialize, PartialEq, PartialOrd, Eq, Ord, Debug)]
+#[derive(Serialize, PartialEq, PartialOrd, Eq, Ord, Debug, Clone)]
 pub struct Title(String);
 
 impl TryFrom<String> for Title {
@@ -85,7 +85,7 @@ impl Display for Title {
 }
 
 /// A valid (well formatted) description
-#[derive(Serialize, PartialEq, PartialOrd, Eq, Ord, Debug)]
+#[derive(Serialize, PartialEq, PartialOrd, Eq, Ord, Debug, Clone)]
 pub struct Description(String);
 
 impl TryFrom<String> for Description {
@@ -108,7 +108,7 @@ impl Display for Description {
 }
 
 /// A valid (well formatted) comment-content
-#[derive(Serialize, PartialEq, PartialOrd, Eq, Ord, Debug)]
+#[derive(Serialize, PartialEq, PartialOrd, Eq, Ord, Debug, Clone)]
 pub struct CommentContent(String);
 
 impl TryFrom<String> for CommentContent {
@@ -131,7 +131,7 @@ impl Display for CommentContent {
 }
 
 /// A valid (well formatted) email
-#[derive(Serialize, PartialEq, PartialOrd, Eq, Ord, Debug)]
+#[derive(Serialize, PartialEq, PartialOrd, Eq, Ord, Debug, Clone)]
 pub struct Email(String);
 
 impl TryFrom<String> for Email {
@@ -157,7 +157,7 @@ impl Display for Email {
 }
 
 /// A valid (well formatted) search query string
-#[derive(Serialize, PartialEq, PartialOrd, Eq, Ord, Debug)]
+#[derive(Serialize, PartialEq, PartialOrd, Eq, Ord, Debug, Clone)]
 pub struct QueryStr(String);
 
 impl TryFrom<String> for QueryStr {
