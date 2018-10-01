@@ -53,6 +53,12 @@ pub struct CategoryPayload {
     description: Description,
 }
 
+impl CategoryPayload {
+    pub fn new(id: impl Into<CategoryId>, title: Title, description: Description) -> Self {
+        CategoryPayload { id: id.into(), title, description }
+    }
+}
+
 #[derive(Getters, Serialize, Deserialize, Debug, PartialEq)]
 pub struct ThreadPayload {
     #[get = "pub"]
