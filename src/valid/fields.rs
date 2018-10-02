@@ -7,6 +7,7 @@ use rocket::http::RawStr;
 use rocket::request::FromFormValue;
 use std::convert::TryFrom;
 use std::fmt::{self, Display};
+use std::ops::Deref;
 
 use super::{EMAIL_REGEX, PASSWORD_REGEX, SEARCH_QUERY_REGEX, USERNAME_REGEX};
 use regex::Regex;
@@ -30,6 +31,7 @@ impl TryFrom<String> for Username {
 }
 
 impl_deserialize_with_try_from!(Username);
+impl_deref!(Username, String);
 
 impl Display for Username {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
@@ -60,6 +62,7 @@ impl TryFrom<String> for PlainPassword {
 }
 
 impl_deserialize_with_try_from!(PlainPassword);
+impl_deref!(PlainPassword, String);
 
 /// A valid (well formatted) title
 #[derive(Serialize, PartialEq, PartialOrd, Eq, Ord, Debug, Clone)]
@@ -77,6 +80,7 @@ impl TryFrom<String> for Title {
 }
 
 impl_deserialize_with_try_from!(Title);
+impl_deref!(Title, String);
 
 impl Display for Title {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
@@ -100,6 +104,7 @@ impl TryFrom<String> for Description {
 }
 
 impl_deserialize_with_try_from!(Description);
+impl_deref!(Description, String);
 
 impl Display for Description {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
@@ -123,6 +128,7 @@ impl TryFrom<String> for CommentContent {
 }
 
 impl_deserialize_with_try_from!(CommentContent);
+impl_deref!(CommentContent, String);
 
 impl Display for CommentContent {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
@@ -149,6 +155,7 @@ impl TryFrom<String> for Email {
 }
 
 impl_deserialize_with_try_from!(Email);
+impl_deref!(Email, String);
 
 impl Display for Email {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
@@ -175,6 +182,7 @@ impl TryFrom<String> for QueryStr {
 }
 
 impl_deserialize_with_try_from!(QueryStr);
+impl_deref!(QueryStr, String);
 
 impl Display for QueryStr {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {

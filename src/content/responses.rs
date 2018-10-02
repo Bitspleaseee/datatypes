@@ -55,7 +55,11 @@ pub struct CategoryPayload {
 
 impl CategoryPayload {
     pub fn new(id: impl Into<CategoryId>, title: Title, description: Description) -> Self {
-        CategoryPayload { id: id.into(), title, description }
+        CategoryPayload {
+            id: id.into(),
+            title,
+            description,
+        }
     }
 }
 

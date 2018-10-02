@@ -46,5 +46,23 @@ macro_rules! id_impls {
                 $exp(n)
             }
         }
+        impl Deref for $ty {
+            type Target = $inner;
+            fn deref(&self) -> &$inner {
+                &self.0
+            }
+        }
+    };
+}
+
+#[macro_export]
+macro_rules! impl_deref {
+    ($ty:ty, $inner:ty) => {
+        impl Deref for $ty {
+            type Target = $inner;
+            fn deref(&self) -> &$inner {
+                &self.0
+            }
+        }
     };
 }
