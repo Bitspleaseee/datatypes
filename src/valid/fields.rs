@@ -32,7 +32,6 @@ impl TryFrom<String> for Username {
 
 impl_deserialize_with_try_from!(Username);
 impl_deref_and_as_ref!(Username, str);
-impl_get_string!(Username);
 
 impl Display for Username {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
@@ -82,7 +81,6 @@ impl TryFrom<String> for Title {
 
 impl_deserialize_with_try_from!(Title);
 impl_deref_and_as_ref!(Title, str);
-impl_get_string!(Title);
 
 impl Display for Title {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
@@ -107,7 +105,6 @@ impl TryFrom<String> for Description {
 
 impl_deserialize_with_try_from!(Description);
 impl_deref_and_as_ref!(Description, str);
-impl_get_string!(Description);
 
 impl Display for Description {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
@@ -132,7 +129,6 @@ impl TryFrom<String> for CommentContent {
 
 impl_deserialize_with_try_from!(CommentContent);
 impl_deref_and_as_ref!(CommentContent, str);
-impl_get_string!(CommentContent);
 
 impl Display for CommentContent {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
@@ -160,7 +156,6 @@ impl TryFrom<String> for Email {
 
 impl_deserialize_with_try_from!(Email);
 impl_deref_and_as_ref!(Email, str);
-impl_get_string!(Email);
 
 impl Display for Email {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {

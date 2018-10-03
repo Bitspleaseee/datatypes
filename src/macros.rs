@@ -72,14 +72,3 @@ macro_rules! impl_deref_and_as_ref {
         }
     };
 }
-
-#[macro_export]
-macro_rules! impl_get_string {
-    ($ty:ty) => {
-        impl $ty {
-            pub fn get_string(&self) -> &String {
-                &self.0
-            }
-        }
-    };
-}
