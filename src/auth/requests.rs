@@ -5,7 +5,7 @@ use crate::payloads::TokenPayload;
 use crate::valid::fields::*;
 use crate::Token;
 
-pub type IntAuthRequest = TokenPayload<AuthRequest, Token>;
+pub type TokenAuthRequest = TokenPayload<AuthRequest, Token>;
 
 #[derive(Serialize, Deserialize)]
 #[serde(

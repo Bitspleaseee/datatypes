@@ -3,9 +3,6 @@
 use crate::payloads::TokenPayload;
 use crate::Token;
 
-pub type IntAdminSuccess = TokenPayload<AdminSuccess, Token>;
-pub type IntAdminError = TokenPayload<AdminError, Token>;
-
 #[derive(Serialize, Deserialize, Debug)]
 #[serde(
     tag = "type",

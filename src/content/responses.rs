@@ -5,9 +5,6 @@ use crate::valid::fields::*;
 use crate::valid::ids::*;
 use crate::Token;
 
-pub type IntContentSuccess = TokenPayload<ContentSuccess, Token>;
-pub type IntContentError = TokenPayload<ContentError, Token>;
-
 /// All the successful responses to a `ContentRequest`
 #[derive(Serialize, Deserialize, Debug)]
 #[serde(
