@@ -167,15 +167,15 @@ impl<Inner, Token> DerefMut for TokenPayload<Inner, Token> {
 /// NB! The type that is wrapped cannot contain a field named `user_id`
 /// (`#[serde(rename="...")]` could be used to circument this)
 #[derive(Serialize, Deserialize, PartialEq, PartialOrd, Debug)]
-pub struct UserCredPayload<Inner> {
+pub struct UserIdPayload<Inner> {
     id: UserId,
     #[serde(flatten)]
     inner: Inner,
 }
 
-impl<Inner> UserCredPayload<Inner> {
-    pub fn new(i: impl Into<Inner>, id: impl Into<UserId>) -> UserCredPayload<Inner> {
-        UserCredPayload {
+impl<Inner> UserIdPayload<Inner> {
+    pub fn new(i: impl Into<Inner>, id: impl Into<UserId>) -> UserIdPayload<Inner> {
+        UserIdPayload {
             inner: i.into(),
             id: id.into(),
         }
@@ -197,14 +197,14 @@ impl<Inner> UserCredPayload<Inner> {
     }
 }
 
-impl<Inner> Deref for UserCredPayload<Inner> {
+impl<Inner> Deref for UserIdPayload<Inner> {
     type Target = Inner;
     fn deref(&self) -> &Self::Target {
         &self.inner
     }
 }
 
-impl<Inner> DerefMut for UserCredPayload<Inner> {
+impl<Inner> DerefMut for UserIdPayload<Inner> {
     fn deref_mut(&mut self) -> &mut Self::Target {
         &mut self.inner
     }
