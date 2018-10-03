@@ -23,6 +23,7 @@ pub enum ContentRequest {
     AddComment(AddCommentPayload),
     EditComment(EditCommentPayload),
     HideComment(HideCommentPayload),
+    EditUser(EditUserPayload),
     UploadAvatar(UploadAvatarPayload),
     Search(SearchPayload),
 }
@@ -35,8 +36,16 @@ pub struct AddCategoryPayload {
     description: Description,
 }
 
+impl AddCategoryPayload {
+    pub fn new(title: Title, description: Description) -> Self {
+        AddCategoryPayload { title, description }
+    }
+}
+
 #[derive(Getters, Serialize, Deserialize, PartialEq, Debug)]
 pub struct EditCategoryPayload {
+    #[get = "pub"]
+    id: CategoryId,
     #[get = "pub"]
     title: Option<Title>,
     #[get = "pub"]
@@ -45,6 +54,8 @@ pub struct EditCategoryPayload {
 
 #[derive(Getters, Serialize, Deserialize, PartialEq, Debug)]
 pub struct HideCategoryPayload {
+    #[get = "pub"]
+    id: CategoryId,
     #[get = "pub"]
     hide: bool,
 }
@@ -66,6 +77,8 @@ pub struct AddThreadPayload {
 #[derive(Getters, Serialize, Deserialize, PartialEq, Debug)]
 pub struct EditThreadPayload {
     #[get = "pub"]
+    id: ThreadId,
+    #[get = "pub"]
     title: Option<Title>,
     #[get = "pub"]
     description: Option<Description>,
@@ -73,6 +86,8 @@ pub struct EditThreadPayload {
 
 #[derive(Getters, Serialize, Deserialize, PartialEq, Debug)]
 pub struct HideThreadPayload {
+    #[get = "pub"]
+    id: ThreadId,
     #[get = "pub"]
     hide: bool,
 }
@@ -94,17 +109,47 @@ pub struct AddCommentPayload {
 #[derive(Getters, Serialize, Deserialize, PartialEq, Debug)]
 pub struct EditCommentPayload {
     #[get = "pub"]
+    id: CommentId,
+    #[get = "pub"]
     content: CommentContent,
 }
 
 #[derive(Getters, Serialize, Deserialize, PartialEq, Debug)]
 pub struct HideCommentPayload {
     #[get = "pub"]
+    id: CommentId,
+    #[get = "pub"]
     hide: bool,
 }
 
 #[derive(Getters, Serialize, Deserialize, PartialEq, Debug)]
+pub struct AddUserPayload {
+    #[get = "pub"]
+    id: UserId,
+    #[get = "pub"]
+    username: Username,
+}
+impl AddUserPayload {
+    pub fn new(id: impl Into<UserId>, username: Username) -> Self {
+        AddUserPayload {
+            id: id.into(),
+            username,
+        }
+    }
+}
+
+#[derive(Getters, Serialize, Deserialize, PartialEq, Debug)]
+pub struct EditUserPayload {
+    #[get = "pub"]
+    id: UserId,
+    #[get = "pub"]
+    description: Description,
+}
+
+#[derive(Getters, Serialize, Deserialize, PartialEq, Debug)]
 pub struct UploadAvatarPayload {
+    #[get = "pub"]
+    id: UserId,
     #[get = "pub"]
     avatar: String,
 }

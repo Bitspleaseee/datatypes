@@ -100,13 +100,28 @@ pub struct CommentPayload {
 #[derive(Getters, Serialize, Deserialize, Debug, PartialEq)]
 pub struct UserPayload {
     #[get = "pub"]
-    id: CommentId,
+    id: UserId,
     #[get = "pub"]
     username: Username,
     #[get = "pub"]
-    description: Description,
+    description: Option<Description>,
     #[get = "pub"]
-    avatar: String,
+    avatar: Option<String>,
+}
+impl UserPayload {
+    pub fn new(
+        id: impl Into<UserId>,
+        username: Username,
+        description: Option<Description>,
+        avatar: Option<String>,
+    ) -> Self {
+        UserPayload {
+            id: id.into(),
+            username,
+            description,
+            avatar,
+        }
+    }
 }
 
 /// A search result which contains all the elements that matched the search
