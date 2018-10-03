@@ -56,11 +56,17 @@ macro_rules! id_impls {
 }
 
 #[macro_export]
-macro_rules! impl_deref {
+macro_rules! impl_deref_and_as_ref {
     ($ty:ty, $inner:ty) => {
         impl Deref for $ty {
             type Target = $inner;
             fn deref(&self) -> &$inner {
+                &self.0
+            }
+        }
+
+        impl AsRef<$inner> for $ty {
+            fn as_ref(&self) -> &$inner {
                 &self.0
             }
         }
