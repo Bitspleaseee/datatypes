@@ -1,6 +1,7 @@
 //! Contains useful template payloads
 
 use std::ops::{Deref, DerefMut};
+use crate::valid::ids::UserId;
 
 /// A payload which must be present, but empty
 ///
@@ -147,6 +148,63 @@ impl<Inner, Token> Deref for TokenPayload<Inner, Token> {
 }
 
 impl<Inner, Token> DerefMut for TokenPayload<Inner, Token> {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.inner
+    }
+}
+
+/// Represents a payload that also contains a user id
+///
+/// This payload is generic for the inner type, this means that the consumer
+/// can provide the type of payload they want. The sole purpose of this
+/// structure is to provide a simple way of wrapping an existing payload with a
+/// user id.
+///
+/// This wrapper is mainly intended for internal use to transport a payload
+/// with a user id between the auth service to the security gate, and from the
+/// security gate to the controller.
+///
+/// NB! The type that is wrapped cannot contain a field named `user_id`
+/// (`#[serde(rename="...")]` could be used to circument this)
+#[derive(Serialize, Deserialize, PartialEq, PartialOrd, Debug)]
+pub struct UserCredPayload<Inner> {
+    id: UserId,
+    #[serde(flatten)]
+    inner: Inner,
+}
+
+impl<Inner> UserCredPayload<Inner> {
+    pub fn new(i: impl Into<Inner>, id: impl Into<UserId>) -> UserCredPayload<Inner> {
+        UserCredPayload {
+            inner: i.into(),
+            id: id.into(),
+        }
+    }
+
+    /// Get a reference to the token of the payload
+    pub fn id(&self) -> &UserId {
+        &self.id
+    }
+
+    /// Set the token of a payload
+    pub fn set_id(&mut self, id: impl Into<UserId>) -> UserId {
+        std::mem::replace(&mut self.id, id.into())
+    }
+
+    /// Turn the payload into its inner type
+    pub fn into_inner(self) -> (Inner, UserId) {
+        (self.inner, self.id)
+    }
+}
+
+impl<Inner> Deref for UserCredPayload<Inner> {
+    type Target = Inner;
+    fn deref(&self) -> &Self::Target {
+        &self.inner
+    }
+}
+
+impl<Inner> DerefMut for UserCredPayload<Inner> {
     fn deref_mut(&mut self) -> &mut Self::Target {
         &mut self.inner
     }
