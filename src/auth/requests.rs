@@ -19,20 +19,15 @@ pub enum AuthRequest {
     RegisterUser(RegisterUserPayload),
 }
 
-#[derive(Getters, Serialize, Deserialize)]
+#[derive(Serialize, Deserialize)]
 pub struct AuthPayload {
-    #[get = "pub"]
-    username: Username,
-    #[get = "pub"]
-    password: PlainPassword,
+    pub username: Username,
+    pub password: PlainPassword,
 }
 
-#[derive(Getters, Serialize, Deserialize)]
+#[derive(Serialize, Deserialize)]
 pub struct RegisterUserPayload {
-    #[get = "pub"]
-    username: Username,
-    #[get = "pub"]
-    password: PlainPassword,
-    #[get = "pub"]
-    email: Email,
+    pub username: Username,
+    pub password: PlainPassword,
+    pub email: Email,
 }

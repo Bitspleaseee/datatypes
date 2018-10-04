@@ -29,139 +29,87 @@ pub enum ContentRequest {
     Search(SearchPayload),
 }
 
-#[derive(Getters, Serialize, Deserialize, PartialEq, Debug)]
+#[derive(Serialize, Deserialize, PartialEq, Debug)]
 pub struct AddCategoryPayload {
-    #[get = "pub"]
-    title: Title,
-    #[get = "pub"]
-    description: Description,
+    pub title: Title,
+    pub description: Description,
 }
 
-impl AddCategoryPayload {
-    pub fn new(title: Title, description: Description) -> Self {
-        AddCategoryPayload { title, description }
-    }
-}
-
-#[derive(Getters, Serialize, Deserialize, PartialEq, Debug)]
+#[derive(Serialize, Deserialize, PartialEq, Debug)]
 pub struct EditCategoryPayload {
-    #[get = "pub"]
-    id: CategoryId,
-    #[get = "pub"]
-    title: Option<Title>,
-    #[get = "pub"]
-    description: Option<Description>,
+    pub id: CategoryId,
+    pub title: Option<Title>,
+    pub description: Option<Description>,
 }
 
-#[derive(Getters, Serialize, Deserialize, PartialEq, Debug)]
+#[derive(Serialize, Deserialize, PartialEq, Debug)]
 pub struct HideCategoryPayload {
-    #[get = "pub"]
-    id: CategoryId,
-    #[get = "pub"]
-    hide: bool,
+    pub id: CategoryId,
+    pub hide: bool,
 }
 
-#[derive(Getters, Serialize, Deserialize, PartialEq, Debug)]
+#[derive(Serialize, Deserialize, PartialEq, Debug)]
 pub struct AddThreadPayload {
-    #[get = "pub"]
-    category_id: CategoryId,
-    #[get = "pub"]
-    user_id: UserId,
-    #[get = "pub"]
-    title: Title,
-    #[get = "pub"]
-    description: Description,
-    #[get = "pub"]
-    timestamp: i64, // TODO change to chrono type?
+    pub category_id: CategoryId,
+    pub user_id: UserId,
+    pub title: Title,
+    pub description: Description,
+    pub timestamp: i64, // TODO change to chrono type?
 }
 
-#[derive(Getters, Serialize, Deserialize, PartialEq, Debug)]
+#[derive(Serialize, Deserialize, PartialEq, Debug)]
 pub struct EditThreadPayload {
-    #[get = "pub"]
-    id: ThreadId,
-    #[get = "pub"]
-    title: Option<Title>,
-    #[get = "pub"]
-    description: Option<Description>,
+    pub id: ThreadId,
+    pub title: Option<Title>,
+    pub description: Option<Description>,
 }
 
-#[derive(Getters, Serialize, Deserialize, PartialEq, Debug)]
+#[derive(Serialize, Deserialize, PartialEq, Debug)]
 pub struct HideThreadPayload {
-    #[get = "pub"]
-    id: ThreadId,
-    #[get = "pub"]
-    hide: bool,
+    pub id: ThreadId,
+    pub hide: bool,
 }
 
-#[derive(Getters, Serialize, Deserialize, PartialEq, Debug)]
+#[derive(Serialize, Deserialize, PartialEq, Debug)]
 pub struct AddCommentPayload {
-    #[get = "pub"]
-    thread_id: ThreadId,
-    #[get = "pub"]
-    user_id: UserId,
-    #[get = "pub"]
-    parent_id: Option<CommentId>,
-    #[get = "pub"]
-    content: CommentContent,
-    #[get = "pub"]
-    timestamp: i64, // TODO change to chrono type?
+    pub thread_id: ThreadId,
+    pub user_id: UserId,
+    pub parent_id: Option<CommentId>,
+    pub content: CommentContent,
+    pub timestamp: i64, // TODO change to chrono type?
 }
 
-#[derive(Getters, Serialize, Deserialize, PartialEq, Debug)]
+#[derive(Serialize, Deserialize, PartialEq, Debug)]
 pub struct EditCommentPayload {
-    #[get = "pub"]
-    id: CommentId,
-    #[get = "pub"]
-    content: CommentContent,
+    pub id: CommentId,
+    pub content: CommentContent,
 }
 
-#[derive(Getters, Serialize, Deserialize, PartialEq, Debug)]
+#[derive(Serialize, Deserialize, PartialEq, Debug)]
 pub struct HideCommentPayload {
-    #[get = "pub"]
-    id: CommentId,
-    #[get = "pub"]
-    hide: bool,
+    pub id: CommentId,
+    pub hide: bool,
 }
 
-#[derive(Getters, Serialize, Deserialize, PartialEq, Debug)]
+#[derive(Serialize, Deserialize, PartialEq, Debug)]
 pub struct AddUserPayload {
-    #[get = "pub"]
-    id: UserId,
-    #[get = "pub"]
-    username: Username,
-}
-impl AddUserPayload {
-    pub fn new(id: impl Into<UserId>, username: Username) -> Self {
-        AddUserPayload {
-            id: id.into(),
-            username,
-        }
-    }
+    pub id: UserId,
+    pub username: Username,
 }
 
-#[derive(Getters, Serialize, Deserialize, PartialEq, Debug)]
+#[derive(Serialize, Deserialize, PartialEq, Debug)]
 pub struct EditUserPayload {
-    #[get = "pub"]
-    id: UserId,
-    #[get = "pub"]
-    description: Description,
+    pub id: UserId,
+    pub description: Description,
 }
 
-#[derive(Getters, Serialize, Deserialize, PartialEq, Debug)]
+#[derive(Serialize, Deserialize, PartialEq, Debug)]
 pub struct UploadAvatarPayload {
-    #[get = "pub"]
-    id: UserId,
-    #[get = "pub"]
-    avatar: String,
+    pub id: UserId,
+    pub avatar: String,
 }
 
-#[derive(Getters, Serialize, Deserialize, PartialEq, Debug)]
+#[derive(Serialize, Deserialize, PartialEq, Debug)]
 pub struct SearchPayload {
-    #[get = "pub"]
-    query: QueryStr,
-}
-impl SearchPayload {
-    pub fn new(query: QueryStr) -> Self {
-        SearchPayload { query }
-    }
+    pub query: QueryStr,
 }
