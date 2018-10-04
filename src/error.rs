@@ -4,6 +4,8 @@ use crate::admin::responses::AdminError;
 use crate::auth::responses::AuthError;
 use crate::content::responses::ContentError;
 
+pub type ResponseResult<T> = Result<T, ResponseError>;
+
 #[derive(Fail, Serialize, Deserialize, PartialEq, Debug)]
 #[serde(
     tag = "type",

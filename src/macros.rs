@@ -64,7 +64,6 @@ macro_rules! impl_deref_and_as_ref {
                 &self.0
             }
         }
-
         impl AsRef<$inner> for $ty {
             fn as_ref(&self) -> &$inner {
                 &self.0

@@ -39,10 +39,19 @@ pub enum ContentError {
 }
 
 #[derive(Serialize, Deserialize, Debug, PartialEq)]
+pub struct UserPayload {
+    pub id: UserId,
+    pub username: Username,
+    pub description: Option<Description>,
+    pub avatar: Option<String>,
+}
+
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct CategoryPayload {
     pub id: CategoryId,
     pub title: Title,
     pub description: Description,
+    pub hidden: bool,
 }
 
 #[derive(Serialize, Deserialize, Debug, PartialEq)]
@@ -64,14 +73,6 @@ pub struct CommentPayload {
     pub title: Title,
     pub description: Description,
     pub timestamp: i64, // TODO change to chrono type?
-}
-
-#[derive(Serialize, Deserialize, Debug, PartialEq)]
-pub struct UserPayload {
-    pub id: UserId,
-    pub username: Username,
-    pub description: Option<Description>,
-    pub avatar: Option<String>,
 }
 
 /// A search result which contains all the elements that matched the search
