@@ -1,7 +1,7 @@
 //! The requests a admin can send to the service
 
 use crate::payloads::TokenPayload;
-use crate::Token;
+use crate::valid::token::Token;
 use std::net::IpAddr;
 
 pub type TokenAdminRequest = TokenPayload<AdminRequest, Token>;

@@ -3,7 +3,7 @@
 use crate::payloads::{TokenPayload, UserIdPayload};
 use crate::valid::fields::*;
 use crate::valid::ids::*;
-use crate::Token;
+use crate::valid::token::Token;
 
 pub type TokenContentRequest = TokenPayload<ContentRequest, Token>;
 pub type UserIdContentRequest = UserIdPayload<ContentRequest>;

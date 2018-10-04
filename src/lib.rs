@@ -13,8 +13,6 @@ extern crate lazy_static;
 extern crate chrono;
 extern crate regex;
 
-
-
 #[macro_use]
 pub mod macros;
 pub mod admin;

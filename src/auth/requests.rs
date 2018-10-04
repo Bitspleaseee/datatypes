@@ -3,7 +3,7 @@
 use crate::payloads::EmptyPayload;
 use crate::payloads::TokenPayload;
 use crate::valid::fields::*;
-use crate::Token;
+use crate::valid::token::Token;
 
 pub type TokenAuthRequest = TokenPayload<AuthRequest, Token>;
 

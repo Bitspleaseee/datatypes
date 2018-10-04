@@ -4,6 +4,7 @@
 
 pub mod fields;
 pub mod ids;
+pub mod token;
 
 // TODO update regexes or change validation to fit our need
 // I just threw together some regexs to test out the functionality

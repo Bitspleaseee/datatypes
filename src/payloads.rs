@@ -1,13 +1,7 @@
 //! Contains useful template payloads
 
-use std::ops::{Deref, DerefMut};
 use crate::valid::ids::UserId;
-use rocket::http::Cookie;
-use rocket::http::Status;
-use rocket::request::{self, FromRequest, Request};
-use rocket::Outcome;
-
-pub const USER_TOKEN_NAME: &str = "user_token";
+use std::ops::{Deref, DerefMut};
 
 /// A payload which must be present, but empty
 ///
@@ -159,38 +153,6 @@ impl<Inner, Token> DerefMut for TokenPayload<Inner, Token> {
     }
 }
 
-<<<<<<< HEAD
-=======
-// Define token.
-pub struct Token (String);
-
-impl Token {
-    pub fn new(token: String) -> Self {
-        Token(token)
-    }
-}
-
-impl<'a, 'r> FromRequest<'a, 'r> for Token {
-    type Error = ResponseError;
-
-    fn from_request(request: &'a Request<'r>) -> request::Outcome<Self, Self::Error> {
-        let cookie = request.cookies().get_private(USER_TOKEN_NAME);
-
-        match cookie {
-            Some(cookie_content) => {
-                // Found a token
-                //info!("Getting request with token {:?}", cookie_content);
-                Outcome::Success(Token::new(cookie_content.value().to_owned()))
-            }
-            None => {
-                // Did not found any token
-                //info!("Did not found any token.");
-                Outcome::Failure((Status::BadRequest, ResponseError::Unauthenticated))
-            }
-        }
-    }
-}
-
 /// Represents a payload that also contains a user id
 ///
 /// This payload is generic for the inner type, this means that the consumer
@@ -245,27 +207,5 @@ impl<Inner> Deref for UserIdPayload<Inner> {
 impl<Inner> DerefMut for UserIdPayload<Inner> {
     fn deref_mut(&mut self) -> &mut Self::Target {
         &mut self.inner
-    }
-}
-
-
-impl<'a, 'r> FromRequest<'a, 'r> for Token<'a> {
-    type Error = ResponseError;
-
-    fn from_request(request: &'a Request<'r>) -> request::Outcome<Self, Self::Error> {
-        let cookie = request.cookies().get_private(USER_TOKEN_NAME);
-
-        match cookie {
-            Some(cookie_content) => {
-                // Found a token
-                //info!("Getting request with token {:?}", cookie_content);
-                Outcome::Success(Token::new(cookie_content.value().to_owned()))
-            }
-            None => {
-                // Did not found any token
-                //info!("Did not found any token.");
-                Outcome::Failure((Status::BadRequest, ResponseError::Unauthenticated))
-            }
-        }
     }
 }

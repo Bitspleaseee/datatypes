@@ -1,8 +1,5 @@
 //! The responses a admin will get from requests to the service
 
-use crate::payloads::TokenPayload;
-use crate::Token;
-
 #[derive(Serialize, Deserialize, Debug)]
 #[serde(
     tag = "type",
