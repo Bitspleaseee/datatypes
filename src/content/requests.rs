@@ -27,6 +27,10 @@ pub enum ContentRequest {
     EditUser(EditUserPayload),
     UploadAvatar(UploadAvatarPayload),
     Search(SearchPayload),
+    GetCategory(GetCategoryPayload),
+    GetThread(GetThreadPayload),
+    GetComment(GetCommentPayload),
+    GetUser(GetUserPayload),
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
@@ -112,4 +116,24 @@ pub struct UploadAvatarPayload {
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 pub struct SearchPayload {
     pub query: QueryStr,
+}
+
+#[derive(Serialize, Deserialize, PartialEq, Debug)]
+pub struct GetCategoryPayload {
+    pub id: CategoryId,
+}
+
+#[derive(Serialize, Deserialize, PartialEq, Debug)]
+pub struct GetThreadPayload {
+    pub id: ThreadId,
+}
+
+#[derive(Serialize, Deserialize, PartialEq, Debug)]
+pub struct GetCommentPayload {
+    pub id: CommentId,
+}
+
+#[derive(Serialize, Deserialize, PartialEq, Debug)]
+pub struct GetUserPayload {
+    pub id: UserId,
 }
