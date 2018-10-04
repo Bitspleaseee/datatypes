@@ -115,7 +115,6 @@ pub struct AddThreadPayload {
     pub user_id: UserId,
     pub title: Title,
     pub description: Description,
-    pub timestamp: i64, // TODO change to chrono type?
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
@@ -149,7 +148,6 @@ pub struct AddCommentPayload {
     pub user_id: UserId,
     pub parent_id: Option<CommentId>,
     pub content: CommentContent,
-    pub timestamp: i64, // TODO change to chrono type?
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug)]

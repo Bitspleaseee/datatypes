@@ -1,5 +1,6 @@
 //! The responses a user will get on requests to the content-database
 
+use chrono::naive::NaiveDateTime;
 use crate::valid::fields::*;
 use crate::valid::ids::*;
 
@@ -61,7 +62,7 @@ pub struct ThreadPayload {
     pub user_id: UserId,
     pub title: Title,
     pub description: Description,
-    pub timestamp: i64, // TODO change to chrono type?
+    pub timestamp: NaiveDateTime,
 }
 
 #[derive(Serialize, Deserialize, Debug, PartialEq)]
@@ -72,7 +73,7 @@ pub struct CommentPayload {
     pub user_id: UserId,
     pub title: Title,
     pub description: Description,
-    pub timestamp: i64, // TODO change to chrono type?
+    pub timestamp: NaiveDateTime,
 }
 
 /// A search result which contains all the elements that matched the search
