@@ -12,6 +12,7 @@ extern crate failure_derive;
 extern crate lazy_static;
 extern crate chrono;
 extern crate regex;
+extern crate tarpc;
 
 #[macro_use]
 pub mod macros;

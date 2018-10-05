@@ -26,3 +26,13 @@ pub enum ResponseError {
     #[fail(display = "internal server error occured")]
     InternalServerError,
 }
+
+impl From<tarpc::Error<ResponseError>> for ResponseError {
+    fn from(e: tarpc::Error<ResponseError>) -> ResponseError {
+        use tarpc::Error::*;
+        match e {
+            App(ee) => ee,
+            _ => ResponseError::InternalServerError,
+        }
+    }
+}
