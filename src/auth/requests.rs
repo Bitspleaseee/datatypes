@@ -5,8 +5,6 @@ use crate::payloads::TokenPayload;
 use crate::valid::fields::*;
 use crate::valid::token::Token;
 
-pub type TokenAuthRequest = TokenPayload<AuthRequest, Token>;
-
 #[derive(Serialize, Deserialize)]
 #[serde(
     tag = "type",
