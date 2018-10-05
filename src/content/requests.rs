@@ -21,7 +21,6 @@ pub enum ContentRequest {
     UploadAvatar(UploadAvatarPayload),
 
     GetCategory(GetCategoryPayload),
-    GetCategories(GetCategoriesPayload),
     AddCategory(AddCategoryPayload),
     EditCategory(EditCategoryPayload),
     HideCategory(HideCategoryPayload),
@@ -39,6 +38,8 @@ pub enum ContentRequest {
     HideComment(HideCommentPayload),
 
     Search(SearchPayload),
+
+    GetHidden(GetHiddenPayload),
 }
 
 // Users
@@ -71,11 +72,6 @@ pub struct UploadAvatarPayload {
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 pub struct GetCategoryPayload {
     pub id: CategoryId,
-}
-
-#[derive(Serialize, Deserialize, PartialEq, Debug)]
-pub struct GetCategoriesPayload {
-    pub include_hidden: bool,
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
@@ -167,4 +163,11 @@ pub struct HideCommentPayload {
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 pub struct SearchPayload {
     pub query: QueryStr,
+}
+
+// Hidden
+
+#[derive(Serialize, Deserialize, PartialEq, Debug)]
+pub struct GetHiddenPayload {
+    pub include_hidden: bool,
 }
