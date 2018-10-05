@@ -1,9 +1,7 @@
 //! The requests a user can make to the content-database
 
-use crate::payloads::{TokenPayload, UserIdPayload};
 use crate::valid::fields::*;
 use crate::valid::ids::*;
-use crate::valid::token::Token;
 
 #[derive(Serialize, Deserialize, Debug)]
 #[serde(

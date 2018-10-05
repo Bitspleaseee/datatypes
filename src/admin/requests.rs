@@ -1,7 +1,5 @@
 //! The requests a admin can send to the service
 
-use crate::payloads::TokenPayload;
-use crate::valid::token::Token;
 use std::net::IpAddr;
 
 #[derive(Serialize, Deserialize, Debug)]
