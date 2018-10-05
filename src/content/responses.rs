@@ -3,6 +3,7 @@
 use chrono::naive::NaiveDateTime;
 use crate::valid::fields::*;
 use crate::valid::ids::*;
+use crate::content::responses::UploadAvatarPayload;
 
 /// All the successful responses to a `ContentRequest`
 #[derive(Serialize, Deserialize, Debug)]
