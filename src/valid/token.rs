@@ -5,6 +5,7 @@ use rocket::Outcome;
 
 pub const USER_TOKEN_NAME: &str = "user_token";
 
+#[derive(Serialize, Deserialize)]
 pub struct Token(String);
 
 impl Token {

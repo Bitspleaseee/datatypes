@@ -52,6 +52,11 @@ macro_rules! id_impls {
                 &self.0
             }
         }
+        impl std::fmt::Display for $ty {
+            fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+                write!(f, "{}", self.0)
+            }
+        }
     };
 }
 

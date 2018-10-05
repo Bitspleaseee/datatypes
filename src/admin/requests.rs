@@ -4,8 +4,6 @@ use crate::payloads::TokenPayload;
 use crate::valid::token::Token;
 use std::net::IpAddr;
 
-pub type TokenAdminRequest = TokenPayload<AdminRequest, Token>;
-
 #[derive(Serialize, Deserialize, Debug)]
 #[serde(
     tag = "type",

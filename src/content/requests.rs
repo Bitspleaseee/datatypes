@@ -5,9 +5,6 @@ use crate::valid::fields::*;
 use crate::valid::ids::*;
 use crate::valid::token::Token;
 
-pub type TokenContentRequest = TokenPayload<ContentRequest, Token>;
-pub type UserIdContentRequest = UserIdPayload<ContentRequest>;
-
 #[derive(Serialize, Deserialize, Debug)]
 #[serde(
     tag = "type",
