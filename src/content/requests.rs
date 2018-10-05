@@ -33,8 +33,6 @@ pub enum ContentRequest {
     HideComment(HideCommentPayload),
 
     Search(SearchPayload),
-
-    GetHidden(GetHiddenPayload),
 }
 
 // Users
