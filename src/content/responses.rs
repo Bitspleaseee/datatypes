@@ -21,6 +21,7 @@ pub enum ContentSuccess {
     User(UserPayload),
     Users(Vec<UserPayload>),
     SearchResult(SearchResultsPayload),
+    Avatar(UploadAvatarPayload),
 }
 
 /// All the unsuccessful responses to a `ContentRequest`
