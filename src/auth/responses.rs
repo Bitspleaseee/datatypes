@@ -13,16 +13,15 @@ pub enum AuthSuccess {
 }
 
 #[derive(Fail, Serialize, Deserialize, PartialEq, Clone, Copy, Debug)]
-#[serde(
-    tag = "type",
-    content = "payload",
-    rename_all = "SCREAMING_SNAKE_CASE"
-)]
 pub enum AuthError {
+    #[fail(display = "invalid token")]
+    InvalidToken,
     #[fail(display = "invalid username")]
     InvalidUsername,
     #[fail(display = "invalid password")]
     InvalidPassword,
     #[fail(display = "user already exists")]
-    CannotRegisterExistingUser,
+    ExistingUser,
+    #[fail(display = "internal server error")]
+    InternalServerError,
 }

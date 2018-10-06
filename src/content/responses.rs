@@ -25,18 +25,13 @@ pub enum ContentSuccess {
 
 /// All the unsuccessful responses to a `ContentRequest`
 #[derive(Fail, Serialize, Deserialize, PartialEq, Clone, Copy, Debug)]
-#[serde(
-    tag = "type",
-    content = "payload",
-    rename_all = "SCREAMING_SNAKE_CASE"
-)]
 pub enum ContentError {
-    #[fail(display = "content is missing or hidden")]
+    #[fail(display = "content was not found")]
     MissingContent,
-    #[fail(display = "passed invalid id")]
-    InvalidId,
-    #[fail(display = "invalid query string")]
-    InvalidQuery,
+    #[fail(display = "content is hidden")]
+    HiddenContent,
+    #[fail(display = "internal server error")]
+    InternalServerError,
 }
 
 #[derive(Serialize, Deserialize, Debug, PartialEq)]
