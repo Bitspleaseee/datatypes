@@ -153,6 +153,7 @@ pub struct HideCommentPayload {
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 pub struct SearchPayload {
     pub query: QueryStr,
+    pub include_hidden: bool,
 }
 
 // Hidden
