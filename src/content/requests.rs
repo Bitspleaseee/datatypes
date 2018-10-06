@@ -10,29 +10,21 @@ use crate::valid::ids::*;
     rename_all = "SCREAMING_SNAKE_CASE"
 )]
 pub enum ContentRequest {
-    GetUser(GetUserPayload),
     AddUser(AddUserPayload),
     EditUser(EditUserPayload),
     UploadAvatar(UploadAvatarPayload),
 
-    GetCategory(GetCategoryPayload),
     AddCategory(AddCategoryPayload),
     EditCategory(EditCategoryPayload),
     HideCategory(HideCategoryPayload),
 
-    GetThread(GetThreadPayload),
-    GetThreads(GetThreadsPayload),
     AddThread(AddThreadPayload),
     EditThread(EditThreadPayload),
     HideThread(HideThreadPayload),
 
-    GetComment(GetCommentPayload),
-    GetComments(GetCommentsPayload),
     AddComment(AddCommentPayload),
     EditComment(EditCommentPayload),
     HideComment(HideCommentPayload),
-
-    Search(SearchPayload),
 }
 
 // Users
