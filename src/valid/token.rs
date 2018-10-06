@@ -6,7 +6,7 @@ use std::convert::{AsRef, From};
 
 pub const USER_TOKEN_NAME: &str = "user_token";
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Clone)]
 pub struct Token(String);
 
 impl Token {
