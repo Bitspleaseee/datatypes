@@ -1,9 +1,9 @@
-use std::convert::{AsRef, From};
-use std::borrow::Cow;
 use crate::error::ResponseError;
-use rocket::http::{Status, Cookie};
+use rocket::http::{Cookie, Status};
 use rocket::request::{FromRequest, Outcome as RequestOutcome, Request};
 use rocket::Outcome;
+use std::borrow::Cow;
+use std::convert::{AsRef, From};
 
 pub const USER_TOKEN_NAME: &str = "user_token";
 
@@ -44,12 +44,11 @@ impl<'a, 'r> FromRequest<'a, 'r> for Token<'a> {
     type Error = ResponseError;
 
     fn from_request(req: &'a Request<'r>) -> RequestOutcome<Self, Self::Error> {
-        req.cookies().get_private(USER_TOKEN_NAME)
-            .map(|cookie|
-                 Outcome::Success(cookie.into())
-            )
-            .unwrap_or_else(||
+        req.cookies()
+            .get_private(USER_TOKEN_NAME)
+            .map(|cookie| Outcome::Success(cookie.into()))
+            .unwrap_or_else(|| {
                 Outcome::Failure((Status::BadRequest, ResponseError::Unauthenticated))
-            )
+            })
     }
 }

@@ -27,12 +27,42 @@ pub enum ResponseError {
     InternalServerError,
 }
 
-impl From<tarpc::Error<ResponseError>> for ResponseError {
-    fn from(e: tarpc::Error<ResponseError>) -> ResponseError {
+impl From<tarpc::Error<ContentError>> for ResponseError {
+    fn from(e: tarpc::Error<ContentError>) -> ResponseError {
+        let ee: ContentError = e.into();
+        match ee {
+            ContentError::InternalServerError => ResponseError::InternalServerError,
+            eee => ResponseError::ContentRequestError(eee),
+        }
+    }
+}
+
+impl From<tarpc::Error<AuthError>> for ResponseError {
+    fn from(e: tarpc::Error<AuthError>) -> ResponseError {
+        let ee: AuthError = e.into();
+        match ee {
+            AuthError::InternalServerError => ResponseError::InternalServerError,
+            eee => ResponseError::AuthRequestError(eee),
+        }
+    }
+}
+
+impl From<tarpc::Error<ContentError>> for ContentError {
+    fn from(e: tarpc::Error<ContentError>) -> ContentError {
         use tarpc::Error::*;
         match e {
             App(ee) => ee,
-            _ => ResponseError::InternalServerError,
+            _ => ContentError::InternalServerError,
+        }
+    }
+}
+
+impl From<tarpc::Error<AuthError>> for AuthError {
+    fn from(e: tarpc::Error<AuthError>) -> AuthError {
+        use tarpc::Error::*;
+        match e {
+            App(ee) => ee,
+            _ => AuthError::InternalServerError,
         }
     }
 }
