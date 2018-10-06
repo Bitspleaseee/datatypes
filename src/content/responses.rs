@@ -58,6 +58,7 @@ pub struct ThreadPayload {
     pub title: Title,
     pub description: Description,
     pub timestamp: NaiveDateTime,
+    pub hidden: bool,
 }
 
 #[derive(Serialize, Deserialize, Debug, PartialEq)]
@@ -66,9 +67,9 @@ pub struct CommentPayload {
     pub thread_id: ThreadId,
     pub parent_id: Option<CommentId>,
     pub user_id: UserId,
-    pub title: Title,
-    pub description: Description,
+    pub content: CommentContent,
     pub timestamp: NaiveDateTime,
+    pub hidden: bool,
 }
 
 /// A search result which contains all the elements that matched the search

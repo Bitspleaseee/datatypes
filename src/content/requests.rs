@@ -57,6 +57,7 @@ pub struct UploadAvatarPayload {
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 pub struct GetCategoryPayload {
     pub id: CategoryId,
+    pub include_hidden: bool,
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
@@ -83,11 +84,13 @@ pub struct HideCategoryPayload {
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 pub struct GetThreadPayload {
     pub id: ThreadId,
+    pub include_hidden: bool,
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 pub struct GetThreadsPayload {
     pub id: CategoryId,
+    pub include_hidden: bool,
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
@@ -116,11 +119,13 @@ pub struct HideThreadPayload {
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 pub struct GetCommentPayload {
     pub id: CommentId,
+    pub include_hidden: bool,
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 pub struct GetCommentsPayload {
     pub id: ThreadId,
+    pub include_hidden: bool,
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
