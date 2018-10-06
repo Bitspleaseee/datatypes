@@ -7,7 +7,6 @@ use rocket::http::RawStr;
 use rocket::request::FromFormValue;
 use std::convert::TryFrom;
 use std::fmt::{self, Display};
-use std::ops::Deref;
 
 use super::{EMAIL_REGEX, PASSWORD_REGEX, SEARCH_QUERY_REGEX, USERNAME_REGEX};
 use regex::Regex;
@@ -31,7 +30,8 @@ impl TryFrom<String> for Username {
 }
 
 impl_deserialize_with_try_from!(Username);
-impl_deref_and_as_ref!(Username, str);
+impl_deref_and_as_ref!(Username => str);
+impl_into_inner!(Username => String);
 
 impl Display for Username {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
@@ -62,7 +62,8 @@ impl TryFrom<String> for PlainPassword {
 }
 
 impl_deserialize_with_try_from!(PlainPassword);
-impl_deref_and_as_ref!(PlainPassword, str);
+impl_deref_and_as_ref!(PlainPassword => str);
+impl_into_inner!(PlainPassword => String);
 
 /// A valid (well formatted) title
 #[derive(Serialize, PartialEq, PartialOrd, Eq, Ord, Debug, Clone)]
@@ -80,7 +81,8 @@ impl TryFrom<String> for Title {
 }
 
 impl_deserialize_with_try_from!(Title);
-impl_deref_and_as_ref!(Title, str);
+impl_deref_and_as_ref!(Title => str);
+impl_into_inner!(Title => String);
 
 impl Display for Title {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
@@ -104,7 +106,8 @@ impl TryFrom<String> for Description {
 }
 
 impl_deserialize_with_try_from!(Description);
-impl_deref_and_as_ref!(Description, str);
+impl_deref_and_as_ref!(Description => str);
+impl_into_inner!(Description => String);
 
 impl Display for Description {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
@@ -128,7 +131,8 @@ impl TryFrom<String> for CommentContent {
 }
 
 impl_deserialize_with_try_from!(CommentContent);
-impl_deref_and_as_ref!(CommentContent, str);
+impl_deref_and_as_ref!(CommentContent => str);
+impl_into_inner!(CommentContent => String);
 
 impl Display for CommentContent {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
@@ -155,7 +159,8 @@ impl TryFrom<String> for Email {
 }
 
 impl_deserialize_with_try_from!(Email);
-impl_deref_and_as_ref!(Email, str);
+impl_deref_and_as_ref!(Email => str);
+impl_into_inner!(Email => String);
 
 impl Display for Email {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
@@ -182,7 +187,8 @@ impl TryFrom<String> for QueryStr {
 }
 
 impl_deserialize_with_try_from!(QueryStr);
-impl_deref_and_as_ref!(QueryStr, str);
+impl_deref_and_as_ref!(QueryStr => str);
+impl_into_inner!(QueryStr => String);
 
 impl Display for QueryStr {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {

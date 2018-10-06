@@ -16,43 +16,40 @@ macro_rules! impl_deserialize_with_try_from {
     };
 }
 
-/// Generates `TryFrom<&'a str>`, `FromParam`, `From<Inner>` and `Id` impls for ids
+/// Generates relevant impls for ids
 #[macro_export]
 macro_rules! id_impls {
-    ($ty:ty, $exp:expr, $inner:ty) => {
-        impl Id for $ty {
+    ($outer_ty:ty, $outer_cons:expr => $inner:ty) => {
+        impl Id for $outer_ty {
             type I = $inner;
             fn inner(&self) -> Self::I {
                 self.0
             }
         }
-        impl TryFrom<&str> for $ty {
-            type Error = ValidationError;
+        impl std::convert::TryFrom<&str> for $outer_ty {
+            type Error = crate::valid::ValidationError;
             fn try_from(s: &str) -> Result<Self, Self::Error> {
                 s.parse::<$inner>()
-                    .map($exp)
-                    .map_err(|_| ValidationError::InvalidId)
+                    .map($outer_cons)
+                    .map_err(|_| crate::valid::ValidationError::InvalidId)
             }
         }
-        impl<'a> FromParam<'a> for $ty {
-            type Error = ValidationError;
-            fn from_param(s: &'a RawStr) -> Result<Self, Self::Error> {
-                let s: &'a str = s.as_ref();
-                s.try_into()
+        impl<'a> rocket::request::FromParam<'a> for $outer_ty {
+            type Error = crate::valid::ValidationError;
+            fn from_param(s: &'a rocket::http::RawStr) -> Result<Self, Self::Error> {
+                use std::convert::TryInto;
+                <rocket::http::RawStr as std::convert::AsRef<str>>::as_ref(s).try_into()
             }
         }
-        impl From<$inner> for $ty {
+        impl std::convert::From<$inner> for $outer_ty {
             fn from(n: $inner) -> Self {
-                $exp(n)
+                $outer_cons(n)
             }
         }
-        impl Deref for $ty {
-            type Target = $inner;
-            fn deref(&self) -> &$inner {
-                &self.0
-            }
-        }
-        impl std::fmt::Display for $ty {
+
+        impl_deref_and_as_ref!($outer_ty => $inner);
+
+        impl std::fmt::Display for $outer_ty {
             fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
                 write!(f, "{}", self.0)
             }
@@ -61,15 +58,27 @@ macro_rules! id_impls {
 }
 
 #[macro_export]
+macro_rules! impl_into_inner {
+    ($outer:ty => $inner:ty) => {
+        impl $outer {
+            #[allow(unused)]
+            pub fn into_inner(self) -> $inner {
+                self.0
+            }
+        }
+    };
+}
+
+#[macro_export]
 macro_rules! impl_deref_and_as_ref {
-    ($ty:ty, $inner:ty) => {
-        impl Deref for $ty {
+    ($outer:ty => $inner:ty) => {
+        impl std::ops::Deref for $outer {
             type Target = $inner;
             fn deref(&self) -> &$inner {
                 &self.0
             }
         }
-        impl AsRef<$inner> for $ty {
+        impl std::convert::AsRef<$inner> for $outer {
             fn as_ref(&self) -> &$inner {
                 &self.0
             }
