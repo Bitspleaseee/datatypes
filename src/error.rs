@@ -1,4 +1,8 @@
-//! A collection of all errors
+//! A collection of all common errors
+
+use crate::admin::responses::AdminError;
+use crate::auth::responses::AuthError;
+use crate::content::responses::ContentError;
 
 pub type ResponseResult<T> = Result<T, ResponseError>;
 
@@ -9,16 +13,12 @@ pub type ResponseResult<T> = Result<T, ResponseError>;
     rename_all = "SCREAMING_SNAKE_CASE"
 )]
 pub enum ResponseError {
-    #[fail(display = "invalid username")]
-    InvalidUsername,
-    #[fail(display = "invalid password")]
-    InvalidPassword,
-    #[fail(display = "user already exists")]
-    CannotRegisterExistingUser,
-    #[fail(display = "content is missing or hidden")]
-    MissingContent,
-    #[fail(display = "passed invalid id")]
-    InvalidId,
+    #[fail(display = "error specific to auth requests")]
+    AuthRequestError(#[cause] AuthError),
+    #[fail(display = "error specific to content requests")]
+    ContentRequestError(#[cause] ContentError),
+    #[fail(display = "error specific to admin requests")]
+    AdminRequestError(#[cause] AdminError),
     #[fail(display = "user is not authenticated with the service")]
     Unauthenticated,
     #[fail(display = "user is not authorized to perform action")]
@@ -34,5 +34,23 @@ impl From<tarpc::Error<ResponseError>> for ResponseError {
             App(ee) => ee,
             _ => ResponseError::InternalServerError,
         }
+    }
+}
+
+impl From<AuthError> for ResponseError {
+    fn from(e: AuthError) -> Self {
+        ResponseError::AuthRequestError(e)
+    }
+}
+
+impl From<ContentError> for ResponseError {
+    fn from(e: ContentError) -> Self {
+        ResponseError::ContentRequestError(e)
+    }
+}
+
+impl From<AdminError> for ResponseError {
+    fn from(e: AdminError) -> Self {
+        ResponseError::AdminRequestError(e)
     }
 }

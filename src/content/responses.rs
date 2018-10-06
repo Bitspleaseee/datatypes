@@ -23,6 +23,22 @@ pub enum ContentSuccess {
     SearchResult(SearchResultsPayload),
 }
 
+/// All the unsuccessful responses to a `ContentRequest`
+#[derive(Fail, Serialize, Deserialize, PartialEq, Clone, Copy, Debug)]
+#[serde(
+    tag = "type",
+    content = "payload",
+    rename_all = "SCREAMING_SNAKE_CASE"
+)]
+pub enum ContentError {
+    #[fail(display = "content is missing or hidden")]
+    MissingContent,
+    #[fail(display = "passed invalid id")]
+    InvalidId,
+    #[fail(display = "invalid query string")]
+    InvalidQuery,
+}
+
 #[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct UserPayload {
     pub id: UserId,
