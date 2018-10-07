@@ -281,13 +281,13 @@ mod tests {
         true
     );
     test_input!(
-        valid_comments,
+        valid_title,
         Title,
         vec!["Just a question.", "Hello", "Hello, I love you all guys!"],
         true
     );
     test_input!(
-        valid_comments,
+        valid_desc,
         Description,
         vec!["Questions can be asked here.", "Hello", "Hello, I love you all guys!"],
         true
