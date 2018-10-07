@@ -308,6 +308,14 @@ mod tests {
         true
     );
     test_input!(
+        unvalid_title,
+        Title,
+        vec!["Just a questionyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy.",
+        "Helloccccccccccccccccccccccccccccccccccccccccccccccccccccccvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvs fgfd fffdfffdfdfddfffffff",
+        "Hello, I love you all guys! Or what Am fthd fgd rg srsrsd weesdef sdfeeeeeeeeeeeeeeeeeeeeef  esfsefsefds dgf  dfd    dfsdf"],
+        false
+    );
+    test_input!(
         valid_desc,
         Description,
         vec![
@@ -327,6 +335,29 @@ mod tests {
                 "A title with &quot;quoutes&quot;"
             ),
             ("A title with <script>", "A title with &lt;script&gt;")
+        ]
+    );
+    test_escaping!(
+        desc_with_quotes,
+        Description,
+        vec![
+            (
+                "A description with \"quoutes\"",
+                "A description with &quot;quoutes&quot;"
+            ),
+            ("A description with <script>", "A description with &lt;script&gt;")
+        ]
+    );
+
+    test_escaping!(
+        comment_with_quotes,
+        CommentContent,
+        vec![
+            (
+                "A comment with \"quoutes\"",
+                "A comment with &quot;quoutes&quot;"
+            ),
+            ("A comment with <script>", "A comment with &lt;script&gt;")
         ]
     );
 }
