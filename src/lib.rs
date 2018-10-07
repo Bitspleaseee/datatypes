@@ -14,6 +14,10 @@ extern crate chrono;
 extern crate regex;
 extern crate tarpc;
 
+#[cfg(test)]
+#[macro_use]
+extern crate proptest;
+
 #[macro_use]
 pub mod macros;
 pub mod admin;

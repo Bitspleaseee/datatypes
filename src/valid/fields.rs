@@ -203,3 +203,51 @@ impl<'a> FromFormValue<'a> for QueryStr {
         QueryStr::try_from(s.to_string())
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    macro_rules! test_input {
+        ($name:ident, $cons:ident, $strs:expr, $is_valid:expr) => {
+            #[test]
+            fn $name() {
+                for s in $strs.into_iter() {
+                    let res = $cons::try_from(String::from(s));
+                    if $is_valid {
+                        assert!(res.is_ok(), "expected '{}' to be valid input", s);
+                    } else {
+                        assert!(res.is_err(), "expected '{}' to be invalid input", s);
+                    }
+                }
+            }
+        };
+    }
+
+    macro_rules! doesnt_crash {
+        ($name:ident, $cons:ident) => {
+            proptest! {
+                #[test]
+                fn $name(s in "\\PC*") {
+                    let _ = $cons::try_from(s);
+                }
+            }
+        };
+    }
+
+    doesnt_crash!(username_doesnt_crash, Username);
+    doesnt_crash!(plain_password_doesnt_crash, PlainPassword);
+    doesnt_crash!(title_doesnt_crash, Title);
+    doesnt_crash!(description_doesnt_crash, Description);
+    doesnt_crash!(comment_content_doesnt_crash, CommentContent);
+    doesnt_crash!(email_doesnt_crash, Email);
+    doesnt_crash!(query_str_doesnt_crash, QueryStr);
+
+    test_input!(valid_usernames, Username, vec!["john", "irene"], true);
+    test_input!(
+        valid_search_query,
+        QueryStr,
+        vec!["john", "irene", "a search with spaces"],
+        true
+    );
+}

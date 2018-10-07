@@ -19,7 +19,7 @@ const PASSWORD_REGEX: &str = "^[\\w]{8,64}$";
 const EMAIL_REGEX: &str = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+\\.[A-Za-z]{2,}$";
 
 /// The regex which vertifies that a search query is formatted correctly
-const SEARCH_QUERY_REGEX: &str = "^[a-zA-Z0-9_- æøåÆØÅ]{2,15}$";
+const SEARCH_QUERY_REGEX: &str = r"^([a-zA-Z0-9_-æøåÆØÅ]|\s){2,15}$";
 
 #[derive(Fail, Serialize, Deserialize, PartialEq, Debug)]
 pub enum ValidationError {
