@@ -11,6 +11,7 @@ extern crate failure_derive;
 #[macro_use]
 extern crate lazy_static;
 extern crate chrono;
+extern crate htmlescape;
 extern crate regex;
 extern crate tarpc;
 

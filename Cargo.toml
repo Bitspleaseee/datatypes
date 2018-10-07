@@ -15,6 +15,7 @@ serde = "1.0"
 serde_derive = "1.0"
 serde_json = "1.0"
 tarpc = { git = "https://github.com/google/tarpc.git", branch = "master" }
+htmlescape = "0.3.1"
 
 [dev-dependencies]
 proptest = "0.8.7"

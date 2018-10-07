@@ -77,7 +77,7 @@ impl TryFrom<String> for Title {
     type Error = ValidationError;
     fn try_from(s: String) -> Result<Self, Self::Error> {
         if 4 < s.len() && s.len() < 80 {
-            Ok(Title(s))
+            Ok(Title(htmlescape::encode_minimal(&s)))
         } else {
             Err(ValidationError::InvalidTitle)
         }
@@ -102,7 +102,7 @@ impl TryFrom<String> for Description {
     type Error = ValidationError;
     fn try_from(s: String) -> Result<Self, Self::Error> {
         if s.len() < 255 {
-            Ok(Description(s))
+            Ok(Description(htmlescape::encode_minimal(&s)))
         } else {
             Err(ValidationError::InvalidDescription)
         }
@@ -127,7 +127,7 @@ impl TryFrom<String> for CommentContent {
     type Error = ValidationError;
     fn try_from(s: String) -> Result<Self, Self::Error> {
         if s.len() > 4 && s.len() < 80 {
-            Ok(CommentContent(s))
+            Ok(CommentContent(htmlescape::encode_minimal(&s)))
         } else {
             Err(ValidationError::InvalidCommentContent)
         }
@@ -211,6 +211,19 @@ impl<'a> FromFormValue<'a> for QueryStr {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    macro_rules! test_escaping {
+        ($name:ident, $cons:ident, $strs:expr) => {
+            #[test]
+            fn $name() {
+                for (s, expt) in $strs.into_iter() {
+                    let res = $cons::try_from(String::from(s))
+                        .expect(&format!("invalid {}", stringify!($cons)));
+                    assert_eq!(&*res, expt, "expected '{}' to be equal to {}", s, expt);
+                }
+            }
+        };
+    }
 
     macro_rules! test_input {
         ($name:ident, $cons:ident, $strs:expr, $is_valid:expr) => {
@@ -303,5 +316,17 @@ mod tests {
             "Hello, I love you all guys!"
         ],
         true
+    );
+
+    test_escaping!(
+        title_with_quotes,
+        Title,
+        vec![
+            (
+                "A title with \"quoutes\"",
+                "A title with &quot;quoutes&quot;"
+            ),
+            ("A title with <script>", "A title with &lt;script&gt;")
+        ]
     );
 }
