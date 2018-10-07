@@ -53,7 +53,7 @@ impl TryFrom<String> for PlainPassword {
         lazy_static! {
             static ref RE: Regex = PASSWORD_REGEX.parse().expect("invalid password regex");
         }
-        if RE.is_match(&s) {
+        if RE.is_match(&s) && s.chars().any(|c| c.is_ascii_lowercase()) && s.chars().any(|c| c.is_ascii_uppercase()) && s.chars().any(|c| c.is_numeric()) {
             Ok(PlainPassword(s))
         } else {
             Err(ValidationError::InvalidPassword)
@@ -265,7 +265,7 @@ mod tests {
     test_input!(
         valid_password,
         PlainPassword,
-        vec!["helloAndWelcome", "irene.Welcome", "post@tom.barneby"],
+        vec!["helloAndWelcome123", "irene.Welcome1", "pOst@tom.barneby1"],
         true
     );
     test_input!(
