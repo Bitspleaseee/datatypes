@@ -76,6 +76,7 @@ pub type EmptyPayload = Option<EmptyPayloadStrict>;
 ///
 /// ```
 /// # use datatypes::payloads::TokenPayload;
+/// # use datatypes::valid::token::Token;
 /// # #[macro_use]
 /// # extern crate serde_derive;
 /// #[derive(Serialize, Deserialize, PartialEq, Debug)]
@@ -84,10 +85,7 @@ pub type EmptyPayload = Option<EmptyPayloadStrict>;
 ///     email: &'a str,
 /// }
 ///
-/// #[derive(Serialize, Deserialize, PartialEq, Debug)]
-/// struct UserToken(u32);
-///
-/// type AuthUserPayload<'a> = TokenPayload<UserPayload<'a>, UserToken>;
+/// type AuthUserPayload<'a> = TokenPayload<UserPayload<'a>>;
 ///
 /// fn main() {
 ///
@@ -95,7 +93,7 @@ pub type EmptyPayload = Option<EmptyPayloadStrict>;
 ///         name: "John Doe",
 ///         email: "john@doe.com"
 ///     };
-///     let token = UserToken(123456789);
+///     let token = Token::new("random-token");
 ///
 ///     // Make a new authentication payload with a inner type and a token
 ///     let payload = AuthUserPayload::new(user_payload, token);
@@ -103,7 +101,7 @@ pub type EmptyPayload = Option<EmptyPayloadStrict>;
 ///     let json = r#"{
 ///                      "name": "John Doe",
 ///                      "email": "john@doe.com",
-///                      "token": 123456789
+///                      "token": "random-token"
 ///                   }"#;
 ///
 ///     let expt: AuthUserPayload = serde_json::from_str(json).unwrap();
