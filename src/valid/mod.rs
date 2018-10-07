@@ -13,7 +13,7 @@ pub mod token;
 const USERNAME_REGEX: &str = "^[a-zA-Z0-9_-]{4,10}$";
 
 /// The regex which vertifies that a password is formatted correctly
-const PASSWORD_REGEX: &str = "^[\\w]{8,64}$";
+const PASSWORD_REGEX: &str = "^[\\w\\d.@%$!]{8,64}$";
 
 /// The regex which vertifies that a password is formatted correctly
 const EMAIL_REGEX: &str = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+\\.[A-Za-z]{2,}$";
