@@ -250,4 +250,46 @@ mod tests {
         vec!["john", "irene", "a search with spaces"],
         true
     );
+    test_input!(
+        valid_emails,
+        Email,
+        vec!["john.theme@example.com", "irene@google.no", "post@tombarneby.com"],
+        true
+    );
+    test_input!(
+        unvalid_emails,
+        Email,
+        vec!["john.theme.example.com", "irene@google", "tombarneby"],
+        false
+    );
+    test_input!(
+        valid_password,
+        PlainPassword,
+        vec!["helloAndWelcome", "irene.Welcome", "post@tom.barneby"],
+        true
+    );
+    test_input!(
+        unvalid_password,
+        PlainPassword,
+        vec!["john", "irenetra", "John"],
+        false
+    );
+    test_input!(
+        valid_comments,
+        CommentContent,
+        vec!["Hello everyone!", "Hello", "Hello, I love you all guys."],
+        true
+    );
+    test_input!(
+        valid_comments,
+        Title,
+        vec!["Just a question.", "Hello", "Hello, I love you all guys!"],
+        true
+    );
+    test_input!(
+        valid_comments,
+        Description,
+        vec!["Questions can be asked here.", "Hello", "Hello, I love you all guys!"],
+        true
+    );
 }
