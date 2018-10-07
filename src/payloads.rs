@@ -1,6 +1,7 @@
 //! Contains useful template payloads
 
 use crate::valid::ids::UserId;
+use crate::valid::token::Token;
 use std::ops::{Deref, DerefMut};
 
 /// A payload which must be present, but empty
@@ -110,14 +111,14 @@ pub type EmptyPayload = Option<EmptyPayloadStrict>;
 /// }
 /// ```
 #[derive(Serialize, Deserialize, PartialEq, PartialOrd, Debug)]
-pub struct TokenPayload<Inner, Token> {
+pub struct TokenPayload<Inner> {
     token: Token,
     #[serde(flatten)]
     inner: Inner,
 }
 
-impl<Inner, Token> TokenPayload<Inner, Token> {
-    pub fn new(i: impl Into<Inner>, t: impl Into<Token>) -> TokenPayload<Inner, Token> {
+impl<Inner> TokenPayload<Inner> {
+    pub fn new(i: impl Into<Inner>, t: impl Into<Token>) -> TokenPayload<Inner> {
         TokenPayload {
             inner: i.into(),
             token: t.into(),
@@ -140,14 +141,14 @@ impl<Inner, Token> TokenPayload<Inner, Token> {
     }
 }
 
-impl<Inner, Token> Deref for TokenPayload<Inner, Token> {
+impl<Inner> Deref for TokenPayload<Inner> {
     type Target = Inner;
     fn deref(&self) -> &Self::Target {
         &self.inner
     }
 }
 
-impl<Inner, Token> DerefMut for TokenPayload<Inner, Token> {
+impl<Inner> DerefMut for TokenPayload<Inner> {
     fn deref_mut(&mut self) -> &mut Self::Target {
         &mut self.inner
     }
