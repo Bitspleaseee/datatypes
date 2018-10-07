@@ -7,12 +7,13 @@ use rocket::http::RawStr;
 use rocket::request::FromFormValue;
 use std::convert::TryFrom;
 use std::fmt::{self, Display};
+use htmlescape::encode_minimal;
 
 use super::{EMAIL_REGEX, PASSWORD_REGEX, SEARCH_QUERY_REGEX, USERNAME_REGEX};
 use regex::Regex;
 
 /// A valid (well formatted) username
-#[derive(Serialize, PartialEq, PartialOrd, Eq, Ord, Debug, Clone)]
+#[derive(PartialEq, PartialOrd, Eq, Ord, Debug, Clone)]
 pub struct Username(String);
 
 impl TryFrom<String> for Username {
@@ -30,6 +31,7 @@ impl TryFrom<String> for Username {
 }
 
 impl_deserialize_with_try_from!(Username);
+impl_serialize!(Username);
 impl_deref_and_as_ref!(Username => str);
 impl_into_inner!(Username => String);
 
@@ -43,8 +45,8 @@ impl Display for Username {
 ///
 /// NB This type does not implement `Debug` for the simple reason that a
 /// plaintext passwords should **never** be printed.
-#[derive(Serialize, PartialEq, PartialOrd, Eq, Ord, Clone)]
-#[serde(rename = "password")]
+#[derive(PartialEq, PartialOrd, Eq, Ord, Clone)]
+//#[serde(rename = "password")]
 pub struct PlainPassword(String);
 
 impl TryFrom<String> for PlainPassword {
@@ -66,11 +68,12 @@ impl TryFrom<String> for PlainPassword {
 }
 
 impl_deserialize_with_try_from!(PlainPassword);
+impl_serialize!(PlainPassword);
 impl_deref_and_as_ref!(PlainPassword => str);
 impl_into_inner!(PlainPassword => String);
 
 /// A valid (well formatted) title
-#[derive(Serialize, PartialEq, PartialOrd, Eq, Ord, Debug, Clone)]
+#[derive(PartialEq, PartialOrd, Eq, Ord, Debug, Clone)]
 pub struct Title(String);
 
 impl TryFrom<String> for Title {
@@ -85,6 +88,7 @@ impl TryFrom<String> for Title {
 }
 
 impl_deserialize_with_try_from!(Title);
+impl_serialize!(Title);
 impl_deref_and_as_ref!(Title => str);
 impl_into_inner!(Title => String);
 
@@ -95,7 +99,7 @@ impl Display for Title {
 }
 
 /// A valid (well formatted) description
-#[derive(Serialize, PartialEq, PartialOrd, Eq, Ord, Debug, Clone)]
+#[derive(PartialEq, PartialOrd, Eq, Ord, Debug, Clone)]
 pub struct Description(String);
 
 impl TryFrom<String> for Description {
@@ -110,6 +114,7 @@ impl TryFrom<String> for Description {
 }
 
 impl_deserialize_with_try_from!(Description);
+impl_serialize!(Description);
 impl_deref_and_as_ref!(Description => str);
 impl_into_inner!(Description => String);
 
@@ -120,7 +125,7 @@ impl Display for Description {
 }
 
 /// A valid (well formatted) comment-content
-#[derive(Serialize, PartialEq, PartialOrd, Eq, Ord, Debug, Clone)]
+#[derive(PartialEq, PartialOrd, Eq, Ord, Debug, Clone)]
 pub struct CommentContent(String);
 
 impl TryFrom<String> for CommentContent {
@@ -135,6 +140,7 @@ impl TryFrom<String> for CommentContent {
 }
 
 impl_deserialize_with_try_from!(CommentContent);
+impl_serialize!(CommentContent);
 impl_deref_and_as_ref!(CommentContent => str);
 impl_into_inner!(CommentContent => String);
 
@@ -145,7 +151,7 @@ impl Display for CommentContent {
 }
 
 /// A valid (well formatted) email
-#[derive(Serialize, PartialEq, PartialOrd, Eq, Ord, Debug, Clone)]
+#[derive(PartialEq, PartialOrd, Eq, Ord, Debug, Clone)]
 pub struct Email(String);
 
 impl TryFrom<String> for Email {
@@ -163,6 +169,7 @@ impl TryFrom<String> for Email {
 }
 
 impl_deserialize_with_try_from!(Email);
+impl_serialize!(Email);
 impl_deref_and_as_ref!(Email => str);
 impl_into_inner!(Email => String);
 
@@ -173,7 +180,7 @@ impl Display for Email {
 }
 
 /// A valid (well formatted) search query string
-#[derive(Serialize, PartialEq, PartialOrd, Eq, Ord, Debug, Clone)]
+#[derive(PartialEq, PartialOrd, Eq, Ord, Debug, Clone)]
 pub struct QueryStr(String);
 
 impl TryFrom<String> for QueryStr {
@@ -191,6 +198,7 @@ impl TryFrom<String> for QueryStr {
 }
 
 impl_deserialize_with_try_from!(QueryStr);
+impl_serialize!(QueryStr);
 impl_deref_and_as_ref!(QueryStr => str);
 impl_into_inner!(QueryStr => String);
 
@@ -345,7 +353,10 @@ mod tests {
                 "A description with \"quoutes\"",
                 "A description with &quot;quoutes&quot;"
             ),
-            ("A description with <script>", "A description with &lt;script&gt;")
+            (
+                "A description with <script>",
+                "A description with &lt;script&gt;"
+            )
         ]
     );
 

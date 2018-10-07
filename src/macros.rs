@@ -16,6 +16,21 @@ macro_rules! impl_deserialize_with_try_from {
     };
 }
 
+#[macro_export]
+macro_rules! impl_serialize {
+    ($ident:ident) => {
+        impl serde::Serialize for $ident {
+            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+            where
+                S: serde::Serializer,
+            {
+                let encoded = encode_minimal(self.as_ref());
+                serializer.serialize_str(&encoded)
+            }
+        }
+    };
+}
+
 /// Generates relevant impls for ids
 #[macro_export]
 macro_rules! id_impls {
