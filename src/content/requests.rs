@@ -12,7 +12,6 @@ use crate::valid::ids::*;
 pub enum ContentRequest {
     AddUser(AddUserPayload),
     EditUser(EditUserPayload),
-    UploadAvatar(UploadAvatarPayload),
 
     AddCategory(AddCategoryPayload),
     EditCategory(EditCategoryPayload),
@@ -43,13 +42,8 @@ pub struct AddUserPayload {
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 pub struct EditUserPayload {
     pub id: UserId,
-    pub description: Description,
-}
-
-#[derive(Serialize, Deserialize, PartialEq, Debug)]
-pub struct UploadAvatarPayload {
-    pub id: UserId,
-    pub avatar: String,
+    pub description: Option<Description>,
+    pub avatar: Option<String>,
 }
 
 // Categories
