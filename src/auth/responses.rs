@@ -25,3 +25,21 @@ pub enum AuthError {
     #[fail(display = "internal server error")]
     InternalServerError,
 }
+
+#[derive(Clone, Copy, Eq, PartialEq, Ord, PartialOrd, Debug, Serialize, Deserialize)]
+pub enum Role {
+    Admin,
+    Moderator,
+    User,
+}
+
+impl<'a> From<&'a str> for Role {
+    fn from(s: &'a str) -> Self {
+        match s {
+            "admin" => Role::Admin,
+            "moderator" => Role::Moderator,
+            "user" => Role::User,
+            _ => Role::User,
+        }
+    }
+}
