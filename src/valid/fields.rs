@@ -187,7 +187,7 @@ impl TryFrom<String> for QueryStr {
     type Error = ValidationError;
     fn try_from(s: String) -> Result<Self, Self::Error> {
         lazy_static! {
-            static ref RE: Regex = SEARCH_QUERY_REGEX.parse().expect("invalid email regex");
+            static ref RE: Regex = SEARCH_QUERY_REGEX.parse().expect("invalid query regex");
         }
         if RE.is_match(&s) {
             Ok(QueryStr(s))
@@ -211,8 +211,9 @@ impl Display for QueryStr {
 impl<'a> FromFormValue<'a> for QueryStr {
     type Error = <QueryStr as TryFrom<String>>::Error;
     fn from_form_value(search_str: &'a RawStr) -> Result<Self, Self::Error> {
-        let s: &'a str = search_str.as_ref();
-        QueryStr::try_from(s.to_string())
+        let s = search_str.url_decode().unwrap_or("");          // Decode string and if not working give empty string back.
+        //let s: &'a str = search_str.as_ref();
+        QueryStr::try_from(s/*.to_string()*/)
     }
 }
 
