@@ -36,6 +36,8 @@ pub enum ContentError {
     InvalidSearchQuery,
     #[fail(display = "invalid id")]
     InvalidId,
+    #[fail(display = "invalid content")]
+    InvalidContent,
 }
 
 #[derive(Serialize, Deserialize, Debug, PartialEq)]
