@@ -34,6 +34,8 @@ pub enum ContentError {
     InternalServerError,
     #[fail(display = "invalid search query")]
     InvalidSearchQuery,
+    #[fail(display = "invalid id")]
+    InvalidId,
 }
 
 #[derive(Serialize, Deserialize, Debug, PartialEq)]
