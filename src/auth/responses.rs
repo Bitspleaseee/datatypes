@@ -28,9 +28,9 @@ pub enum AuthError {
 
 #[derive(Clone, Copy, Eq, PartialEq, Ord, PartialOrd, Debug, Serialize, Deserialize)]
 pub enum Role {
-    Admin,
-    Moderator,
-    User,
+    Admin = 30,
+    Moderator = 20,
+    User = 10,
 }
 
 impl<'a> From<&'a str> for Role {
