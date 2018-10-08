@@ -47,7 +47,7 @@ impl<'a, 'r> FromRequest<'a, 'r> for Token {
             .get_private(USER_TOKEN_NAME)
             .map(|cookie| Outcome::Success(cookie.into()))
             .unwrap_or_else(|| {
-                Outcome::Failure((Status::BadRequest, ResponseError::Unauthenticated))
+                Outcome::Failure((Status::Forbidden, ResponseError::Unauthenticated))
             })
     }
 }
