@@ -3,11 +3,11 @@
 // TODO add tests which vertifies the `TryFrom` implementations
 
 use super::ValidationError;
+use htmlescape::encode_minimal;
 use rocket::http::RawStr;
 use rocket::request::FromFormValue;
 use std::convert::TryFrom;
 use std::fmt::{self, Display};
-use htmlescape::encode_minimal;
 
 use super::{EMAIL_REGEX, PASSWORD_REGEX, SEARCH_QUERY_REGEX, USERNAME_REGEX};
 use regex::Regex;
@@ -79,9 +79,12 @@ pub struct Title(String);
 impl TryFrom<String> for Title {
     type Error = ValidationError;
     fn try_from(s: String) -> Result<Self, Self::Error> {
+        println!("checking title '{}'", s.as_str());
         if 4 < s.len() && s.len() < 80 {
+            println!("valid title '{}'", s.as_str());
             Ok(Title(htmlescape::encode_minimal(&s)))
         } else {
+            println!("invalid title '{}'", s.as_str());
             Err(ValidationError::InvalidTitle)
         }
     }
@@ -105,9 +108,12 @@ pub struct Description(String);
 impl TryFrom<String> for Description {
     type Error = ValidationError;
     fn try_from(s: String) -> Result<Self, Self::Error> {
+        println!("checking description '{}'", s.as_str());
         if s.len() < 255 {
+            println!("valid description '{}'", s.as_str());
             Ok(Description(htmlescape::encode_minimal(&s)))
         } else {
+            println!("invalid description '{}'", s.as_str());
             Err(ValidationError::InvalidDescription)
         }
     }
@@ -211,7 +217,7 @@ impl Display for QueryStr {
 impl<'a> FromFormValue<'a> for QueryStr {
     type Error = <QueryStr as TryFrom<String>>::Error;
     fn from_form_value(search_str: &'a RawStr) -> Result<Self, Self::Error> {
-        let s = search_str.url_decode().unwrap_or("".to_string());          // Decode string and if not working give empty string back.
+        let s = search_str.url_decode().unwrap_or("".to_string()); // Decode string and if not working give empty string back.
         QueryStr::try_from(s)
     }
 }
