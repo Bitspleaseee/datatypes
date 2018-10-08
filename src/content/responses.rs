@@ -32,6 +32,8 @@ pub enum ContentError {
     HiddenContent,
     #[fail(display = "internal server error")]
     InternalServerError,
+    #[fail(display = "invalid search query")]
+    InvalidSearchQuery,
 }
 
 #[derive(Serialize, Deserialize, Debug, PartialEq)]
