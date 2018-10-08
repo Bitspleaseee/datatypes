@@ -20,6 +20,8 @@ pub enum AuthError {
     InvalidUsername,
     #[fail(display = "invalid password")]
     InvalidPassword,
+    #[fail(display = "username or password is invalid")]
+    InvalidCredentials,
     #[fail(display = "user already exists")]
     ExistingUser,
     #[fail(display = "internal server error")]
