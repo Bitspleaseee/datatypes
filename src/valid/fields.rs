@@ -212,8 +212,7 @@ impl<'a> FromFormValue<'a> for QueryStr {
     type Error = <QueryStr as TryFrom<String>>::Error;
     fn from_form_value(search_str: &'a RawStr) -> Result<Self, Self::Error> {
         let s = search_str.url_decode().unwrap_or("".to_string());          // Decode string and if not working give empty string back.
-        //let s: &'a str = search_str.as_ref();
-        QueryStr::try_from(s/*.to_string()*/)
+        QueryStr::try_from(s)
     }
 }
 
