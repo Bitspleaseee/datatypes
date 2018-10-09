@@ -45,3 +45,13 @@ impl<'a> From<&'a str> for Role {
         }
     }
 }
+
+impl Into<String> for Role {
+    fn into(self) -> String {
+        match self {
+            Role::Admin => "admin".to_owned(),
+            Role::Moderator => "moderator".to_owned(),
+            Role::User => "user".to_owned(),
+        }
+    }
+}
