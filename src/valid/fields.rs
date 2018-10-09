@@ -3,11 +3,11 @@
 // TODO add tests which vertifies the `TryFrom` implementations
 
 use super::ValidationError;
+use htmlescape::encode_minimal;
 use rocket::http::RawStr;
 use rocket::request::FromFormValue;
 use std::convert::TryFrom;
 use std::fmt::{self, Display};
-use htmlescape::encode_minimal;
 
 use super::{EMAIL_REGEX, PASSWORD_REGEX, SEARCH_QUERY_REGEX, USERNAME_REGEX};
 use regex::Regex;
@@ -211,7 +211,7 @@ impl Display for QueryStr {
 impl<'a> FromFormValue<'a> for QueryStr {
     type Error = <QueryStr as TryFrom<String>>::Error;
     fn from_form_value(search_str: &'a RawStr) -> Result<Self, Self::Error> {
-        let s = search_str.url_decode().unwrap_or("".to_string());          // Decode string and if not working give empty string back.
+        let s = search_str.url_decode().unwrap_or("".to_string()); // Decode string and if not working give empty string back.
         QueryStr::try_from(s)
     }
 }

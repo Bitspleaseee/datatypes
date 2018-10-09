@@ -9,6 +9,7 @@
 pub enum AdminSuccess {
     IpBanned,
     IpUnbanned,
+    ChangedRole,
 }
 
 #[derive(Fail, Serialize, Deserialize, PartialEq, Clone, Copy, Debug)]

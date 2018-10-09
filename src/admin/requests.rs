@@ -1,5 +1,6 @@
 //! The requests a admin can send to the service
 
+use crate::auth::requests::SetUserRolePayload;
 use std::net::IpAddr;
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -11,6 +12,7 @@ use std::net::IpAddr;
 pub enum AdminRequest {
     BanIp(IpAddrPayload),
     UnbanIp(IpAddrPayload),
+    SetUserRole(SetUserRolePayload),
 }
 
 #[derive(Serialize, Deserialize, Debug)]

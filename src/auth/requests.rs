@@ -1,9 +1,9 @@
 //! The requests a user can send to the auth-service
 
-use crate::payloads::EmptyPayload;
-use crate::valid::ids::*;
-use crate::valid::fields::*;
 use crate::auth::responses::Role;
+use crate::payloads::EmptyPayload;
+use crate::valid::fields::*;
+use crate::valid::ids::*;
 
 #[derive(Serialize, Deserialize)]
 #[serde(
@@ -15,7 +15,6 @@ pub enum AuthRequest {
     Authenticate(AuthPayload),
     Deauthenticate(EmptyPayload),
     RegisterUser(RegisterUserPayload),
-    SetUserRole(SetUserRolePayload),
 }
 
 #[derive(Serialize, Deserialize)]
@@ -31,8 +30,7 @@ pub struct RegisterUserPayload {
     pub email: Email,
 }
 
-
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct SetUserRolePayload {
     pub id: UserId,
     pub role: Role,
