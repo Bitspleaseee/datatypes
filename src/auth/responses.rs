@@ -28,7 +28,7 @@ pub enum AuthError {
     InternalServerError,
 }
 
-#[derive(Clone, Copy, Eq, PartialEq, Ord, PartialOrd, Debug, Serialize, Deserialize)]
+#[derive(Clone, Copy, Eq, PartialEq, Ord, PartialOrd, Debug)]
 pub enum Role {
     Admin = 30,
     Moderator = 20,
@@ -53,5 +53,25 @@ impl Into<String> for Role {
             Role::Moderator => "moderator".to_owned(),
             Role::User => "user".to_owned(),
         }
+    }
+}
+
+impl<'de> serde::de::Deserialize<'de> for Role {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::de::Deserializer<'de>,
+    {
+        use serde::de::Deserialize;
+        let s = String::deserialize(deserializer)?;
+        Ok(Role::from(s.as_ref()))
+    }
+}
+impl serde::Serialize for Role {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        let string: String = Role::into(*self);
+        serializer.serialize_str(&string)
     }
 }
