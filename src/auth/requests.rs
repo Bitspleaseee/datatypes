@@ -15,6 +15,7 @@ pub enum AuthRequest {
     Authenticate(AuthPayload),
     Deauthenticate(EmptyPayload),
     RegisterUser(RegisterUserPayload),
+    SetUserRole(SetUserRolePayload),
 }
 
 #[derive(Serialize, Deserialize)]
