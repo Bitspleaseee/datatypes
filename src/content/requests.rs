@@ -90,7 +90,7 @@ pub struct GetThreadsPayload {
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 pub struct AddThreadPayload {
     pub category_id: CategoryId,
-    pub user_id: UserId,
+    pub user_id: Option<UserId>,
     pub title: Title,
     pub description: Description,
 }
@@ -98,6 +98,7 @@ pub struct AddThreadPayload {
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 pub struct EditThreadPayload {
     pub id: ThreadId,
+    pub user_id: Option<UserId>,
     pub title: Option<Title>,
     pub description: Option<Description>,
 }
@@ -105,6 +106,7 @@ pub struct EditThreadPayload {
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 pub struct HideThreadPayload {
     pub id: ThreadId,
+    pub user_id: Option<UserId>,
     pub hide: bool,
 }
 
@@ -125,7 +127,7 @@ pub struct GetCommentsPayload {
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 pub struct AddCommentPayload {
     pub thread_id: ThreadId,
-    pub user_id: UserId,
+    pub user_id: Option<UserId>,
     pub parent_id: Option<CommentId>,
     pub content: CommentContent,
 }
@@ -133,12 +135,14 @@ pub struct AddCommentPayload {
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 pub struct EditCommentPayload {
     pub id: CommentId,
+    pub user_id: Option<UserId>,
     pub content: CommentContent,
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 pub struct HideCommentPayload {
     pub id: CommentId,
+    pub user_id: Option<UserId>,
     pub hide: bool,
 }
 
