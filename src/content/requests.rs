@@ -41,7 +41,7 @@ pub struct AddUserPayload {
 
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 pub struct EditUserPayload {
-    pub id: UserId,
+    pub id: Option<UserId>,
     pub description: Option<Description>,
     pub avatar: Option<String>,
 }
